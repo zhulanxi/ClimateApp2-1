@@ -1,3 +1,14 @@
 .atm-layer {
-    
+    background: #85b8da;
+    height: 100%;
+    border-radius: inherit;
+    padding: 5px;
+}
+
+.header-line{
+    height: 25%;
+}
+
+.core-line{
+    height: 25%;
 }

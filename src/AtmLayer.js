@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
 import './AtmLayer.css';
 
-class AtmLayer extends Component{
+class AtmLayer extends Component {
     //This components should be enclosed in a SmallContainer
-    constructor(props){
+    constructor(props) {
         super(props);
 
 
     }
-    render(){
-        return(
+    render() {
+        return (
             <div className="atm-layer">
-                This would be a layer
+                <div className="header-line">
+                    Layer1
+                </div>
+                <div className="core-line">
+                    alpha
+                </div>
+                <div className="core-line">
+                    beta
+                </div>
+                <div className="core-line">
+                    gamma
+                </div>
             </div>
         );
     }

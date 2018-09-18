@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import './MainContainer.css';
+import './LayerContainer.css';
 import SmallContainer from './SmallContainer';
 import AtmLayer from './AtmLayer';
 import LayerAdder from './LayerAdder';
 
-class MainContainer extends Component {
+/**
+ * Contains the boxes for each layer and the logic to render them
+ */
+class LayerContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -13,7 +16,7 @@ class MainContainer extends Component {
     render() {
 
         //This is the list of layer boxes
-        var layerContainers = (
+        var layerBoxes = (
             this.props.layers.map(function (layer) {
                 return (
                     <React.Fragment>
@@ -37,13 +40,13 @@ class MainContainer extends Component {
         )
 
         return (
-            <div className='main-container' >
+            <div className='layer-container' >
                 <div className='container-spacer'></div>
-                {layerContainers}
+                {layerBoxes}
                 {layerAdder}
             </div>
         );
     }
 }
 
-export default MainContainer;
+export default LayerContainer;

@@ -1,3 +1,7 @@
 .layer-adder{
-    font-size: 5rem
+    font-size: 6rem;
+    height: 100%;
+    border-color:#4f97c5;
+    border-style: dotted;
+    border-radius: inherit;
 }

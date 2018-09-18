@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 //import ReactDOM from 'react-dom';
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import logo from './sun.svg';
 import './App.css';
-import AtmLayer from './AtmLayer';
-import LayerAdder from './LayerAdder';
-import SmallContainer from './SmallContainer';
-import MainContainer from './MainContainer';
+import LayerContainer from './LayerContainer';
 
 /**
  * We will need multiple components. All data should be accessed through the parents, passed through props. To add data to a state of a component,
@@ -50,11 +48,8 @@ class App extends Component {
   }
 
   render() {
-    var s1 = {
-      background: "green"
-    }
     var s2 = {
-      background: "blue"
+      background: "white"
     }
     return (
       <div className="App">
@@ -64,8 +59,8 @@ class App extends Component {
         </header>
         <main role="main" className="container">
           <div className="row main-container">
-            <div className="col-sm-6" style={s1}>
-              <MainContainer layers={this.state.layers} />
+            <div className="col-sm-6">
+              <LayerContainer layers={this.state.layers} />
             </div>
             <div className="col-sm-6" style={s2}>
               test
