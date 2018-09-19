@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './LayerAdder.css';
+import {FaPlus} from 'react-icons/fa'
+
 
 class LayerAdder extends Component {
     //This components should be enclosed in a SmallContainer

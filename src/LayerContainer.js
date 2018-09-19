@@ -17,9 +17,9 @@ class LayerContainer extends Component {
 
         //This is the list of layer boxes
         var layerBoxes = (
-            this.props.layers.map(function (layer) {
+            this.props.layers.map(function (layer,index) {
                 return (
-                    <React.Fragment>
+                    <React.Fragment key={index}>
                         <SmallContainer>
                             <AtmLayer />
                         </SmallContainer>

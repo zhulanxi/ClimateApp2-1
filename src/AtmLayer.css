@@ -2,13 +2,37 @@
     background: #85b8da;
     height: 100%;
     border-radius: inherit;
-    padding: 5px;
+    padding: 10px;
+    box-shadow: -5px 5px 5px grey;
 }
 
 .header-line{
     height: 25%;
+    background-color:red;
 }
 
 .core-line{
     height: 25%;
+}
+
+.layer-name{
+    float: left;
+}
+
+.layer-tools{
+    float:right;
+}
+
+.layer-button{
+    background-color: #176699;
+    border: none;
+    border-radius: 5px;
+    border: 3px solid;
+    border-color: #176699;
+}
+
+.layer-button:hover{
+    
+    background-color: inherit;
+    cursor: pointer;
 }

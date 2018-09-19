@@ -21,12 +21,16 @@ class App extends Component {
       layers: [{
         name:"Layer1",
         alpha:0.7,
-        beta:0.3
+        beta:0.3,
+        gamma:0.0,
+        locked:false
       },
       {
         name:"Layer2",
         alpha:0.2,
-        beta:0.5
+        beta:0.5,
+        gamma:0.0,
+        locked:false
       }
     ]
     };
