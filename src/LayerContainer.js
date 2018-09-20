@@ -1,27 +1,23 @@
 import React, { Component } from 'react';
 import './LayerContainer.css';
 import SmallContainer from './SmallContainer';
-import AtmLayer from './AtmLayer';
 import LayerAdder from './LayerAdder';
 
 /**
  * Contains the boxes for each layer and the logic to render them
  */
 class LayerContainer extends Component {
-    constructor(props) {
-        super(props);
-
-
-    }
     render() {
+
 
         //This is the list of layer boxes
         var layerBoxes = (
-            this.props.layers.map(function (layer,index) {
+            this.props.layers.map((_layer, index) => {
+                const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer }); //Used to add props
                 return (
                     <React.Fragment key={index}>
                         <SmallContainer>
-                            <AtmLayer />
+                            {childrenWithProps}
                         </SmallContainer>
                         <div className='container-spacer'></div>
                     </React.Fragment>
@@ -33,7 +29,7 @@ class LayerContainer extends Component {
         var layerAdder = Object.keys(this.props.layers).length >= 3 ? '' : (
             <React.Fragment>
                 <SmallContainer>
-                    <LayerAdder />
+                    <LayerAdder addNewDefaultLayer={this.props.addNewDefaultLayer} />
                 </SmallContainer>
                 <div className='container-spacer'></div>
             </React.Fragment>

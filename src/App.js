@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import logo from './sun.svg';
 import './App.css';
 import LayerContainer from './LayerContainer';
+import AtmLayer from './AtmLayer';
+
 
 /**
  * We will need multiple components. All data should be accessed through the parents, passed through props. To add data to a state of a component,
@@ -16,45 +18,68 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    var layer1 = {
+      name: "layer1",
+      alpha: 0.7,
+      beta: 0.3,
+      gamma: 0.0,
+      locked: false
+    }
+
+    var layer2 = {
+      name: "layer2",
+      alpha: 0.2,
+      beta: 0.5,
+      gamma: 0.0,
+      locked: true
+    }
+
     this.state = {
-      temp: 0.0,
-      layers: [{
-        name:"Layer1",
-        alpha:0.7,
-        beta:0.3,
-        gamma:0.0,
-        locked:false
-      },
-      {
-        name:"Layer2",
-        alpha:0.2,
-        beta:0.5,
-        gamma:0.0,
-        locked:false
-      }
-    ]
+      nameCount: 3,
+      layers: [layer1, layer2]
     };
 
-    this.handleChange = this.handleChange.bind(this)
+    this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
+    this.addNewLayer = this.addNewLayer.bind(this);
+    this.removeLayer = this.removeLayer.bind(this);
   }
 
-  addDefaultLayer(newLayer) {
-    //TODO validate so we never have less than 0 or more than 3
-    this.setState((state) => ({
-      layers: this.state.layers.concat(newLayer)
+  addNewDefaultLayer() {
+    var newLayer = {
+      name: "layer" + this.state.nameCount,
+      alpha: 0.5,
+      beta: 0.5,
+      gamma: 0.5,
+      locked: true
+    }
+    this.addNewLayer(newLayer);
+  }
+
+  addNewLayer(newLayer) {
+    if (Object.keys(this.state.layers).length >= 3) {
+      return false;
+    }
+
+    this.setState((prevState) => ({
+      nameCount: prevState.nameCount + 1,
+      layers: [...prevState.layers, newLayer]
     }))
   }
 
-  handleChange(e) {
-    this.setState({
-      temp: e.target.value
-    })
+  removeLayer(delLayer) {
+
+    // TODO, maybe it could help to have some validation
+
+    this.setState(prevState => ({
+      layers: prevState.layers.filter(layer => !Object.is(layer, delLayer))
+    }));
   }
 
   render() {
     var s2 = {
       background: "white"
     }
+
     return (
       <div className="App">
         <header className="App-header">
@@ -64,20 +89,15 @@ class App extends Component {
         <main role="main" className="container">
           <div className="row main-container">
             <div className="col-sm-6">
-              <LayerContainer layers={this.state.layers} />
+              <LayerContainer layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
+                <AtmLayer removeLayer={this.removeLayer} />
+              </LayerContainer>
             </div>
             <div className="col-sm-6" style={s2}>
-              test
+              Simulation
             </div>
           </div>
-
-          {/* <p> Temp is: {this.state.temp}</p>
-          <p>Set the temp here: <input type="text" value={this.state.temp} onChange={this.handleChange}></input></p>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-        </p> */}
         </main>
-
       </div>
     );
   }

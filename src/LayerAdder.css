@@ -3,5 +3,11 @@
     height: 100%;
     border-color:#4f97c5;
     border-style: dotted;
+    border-width: 5px;
     border-radius: inherit;
+}
+
+.layer-adder:hover{
+    cursor: pointer;
+    background-color:#85b8da;
 }
