@@ -86,6 +86,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Climate App 2.0</h1>
         </header>
+        <br/><br/><br/>
         <main role="main" className="container">
           <div className="row main-container">
             <div className="col-sm-6">

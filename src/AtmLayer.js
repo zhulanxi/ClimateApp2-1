@@ -43,13 +43,13 @@ class AtmLayer extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                    <span>alpha <InputRange maxValue={1} minValue={0} value={this.state.alpha} onChange={value => this.setState({alpha: value})} step={0.05}/></span>
+                    <span>alpha : {this.state.alpha.toFixed(2)}<InputRange maxValue={1} minValue={0} value={this.state.alpha} onChange={value => this.setState({alpha: value})} step={0.01}/></span>
                 </div>
                 <div className="core-line">
-                    <span>beta <InputRange maxValue={1} minValue={0} value={this.state.beta} onChange={value => this.setState({beta: value})} step={0.05}/></span>
+                    <span>beta : {this.state.beta.toFixed(2)}<InputRange maxValue={1} minValue={0} value={this.state.beta} onChange={value => this.setState({beta: value})} step={0.01}/></span>
                 </div>
                 <div className="core-line">
-                    <span>gamma <InputRange maxValue={1} minValue={0} value={this.state.gamma} onChange={value => this.setState({gamma: value})} step={0.05}/></span>
+                    <span>gamma :{this.state.gamma.toFixed(2)}<InputRange maxValue={1} minValue={0} value={this.state.gamma} onChange={value => this.setState({gamma: value})} step={0.01}/></span>
                 </div>
             </div>
         );
