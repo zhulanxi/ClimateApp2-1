@@ -1,6 +1,8 @@
 
--[ ] Hover color transition
--[ ] Bind functions
--[ ] Add Slider
--[ ] Center text
+-[ ] Style of slider
+-[ ] Display value
+-[ ] bind to global state
+
+-[ ] Format layers
+
 -[ ] Implement canvas

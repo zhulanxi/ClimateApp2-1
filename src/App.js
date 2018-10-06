@@ -5,6 +5,8 @@ import logo from './sun.svg';
 import './App.css';
 import LayerContainer from './LayerContainer';
 import AtmLayer from './AtmLayer';
+import SingleSettingController from './SingleSettingController';
+import SliderSetting from './SliderSetting';
 
 
 /**
@@ -35,8 +37,10 @@ class App extends Component {
     }
 
     this.state = {
+      stellarRadiation: 0,
+      planetaryAlbedo: 0,
       nameCount: 3,
-      layers: [layer1, layer2]
+      layers: [layer1]
     };
 
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
@@ -86,13 +90,23 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Climate App 2.0</h1>
         </header>
-        <br/><br/><br/>
+        <br /><br /><br />
         <main role="main" className="container">
           <div className="row main-container">
             <div className="col-sm-6">
-              <LayerContainer layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
-                <AtmLayer removeLayer={this.removeLayer} />
-              </LayerContainer>
+              <SingleSettingController>
+                <SliderSetting settingName="Stellar Radiation" />
+              </SingleSettingController>
+              <SingleSettingController>
+                <SliderSetting settingName="Planetary Albedo" />
+              </SingleSettingController>
+
+              <SingleSettingController>
+                <LayerContainer layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
+                  <AtmLayer removeLayer={this.removeLayer} />
+                </LayerContainer>
+              </SingleSettingController>
+
             </div>
             <div className="col-sm-6" style={s2}>
               Simulation
