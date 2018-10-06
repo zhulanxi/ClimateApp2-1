@@ -46,6 +46,20 @@ class App extends Component {
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
     this.addNewLayer = this.addNewLayer.bind(this);
     this.removeLayer = this.removeLayer.bind(this);
+    this.changeAlbedo = this.changeAlbedo.bind(this);
+    this.changeStellarRadiation = this.changeStellarRadiation.bind(this);
+  }
+
+  changeAlbedo(newValue){
+    this.setState({
+      planetaryAlbedo: newValue
+    })
+  }
+
+  changeStellarRadiation(newValue){
+    this.setState({
+      stellarRadiation: newValue
+    })
   }
 
   addNewDefaultLayer() {
@@ -95,10 +109,10 @@ class App extends Component {
           <div className="row main-container">
             <div className="col-sm-6">
               <SingleSettingController>
-                <SliderSetting settingName="Stellar Radiation" />
+                <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation}/>
               </SingleSettingController>
               <SingleSettingController>
-                <SliderSetting settingName="Planetary Albedo" />
+                <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.state.changeAlbedo}/>
               </SingleSettingController>
 
               <SingleSettingController>
