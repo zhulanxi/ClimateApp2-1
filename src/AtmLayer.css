@@ -1,5 +1,6 @@
 .atm-layer {
-    background: #85b8da;
+    /* background: #85b8da; */
+    background-color: #dae6f2;
     height: 100%;
     border-radius: inherit;
     padding: 10px;
@@ -23,11 +24,13 @@
 }
 
 .layer-button{
-    background-color: #176699;
+    /* background-color: #176699; */
+    background-color: #4f97c5;
     border: none;
     border-radius: 5px;
-    border: 2px solid;
-    border-color: #176699;
+    border: 3px solid;
+    /* border-color: #176699; */
+    border-color: #4f97c5;
     height: 28px;
     width: 28px;
     padding: 0px;

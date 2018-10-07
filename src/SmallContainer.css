@@ -1,5 +1,6 @@
 .small-container {
-    height: 30%;
+    flex: 0 1 96px;
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 

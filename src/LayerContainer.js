@@ -19,7 +19,7 @@ class LayerContainer extends Component {
                         <SmallContainer>
                             {childrenWithProps}
                         </SmallContainer>
-                        <div className='container-spacer'></div>
+                        {/* <div className='container-spacer'></div> */}
                     </React.Fragment>
                 )
             })
@@ -39,8 +39,8 @@ class LayerContainer extends Component {
             // <div className="box">
             <React.Fragment>
                 <p className='box-content'>{this.props.settingName}</p>
-                <div className='layer-container box-filler' >
-                    <div className='container-spacer'></div>
+                <div className='layer-container box box-filler' >
+                    {/* <div className='container-spacer'></div> */}
                     {layerBoxes}
                     {layerAdder}
                 </div>

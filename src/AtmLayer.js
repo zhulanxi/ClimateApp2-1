@@ -46,6 +46,7 @@ class AtmLayer extends Component {
                         max={1}
                         step={0.1}
                         trackStyle={{
+                            // backgroundColor: '#4f97c5',
                             backgroundColor: '#4f97c5',
                             height: 7
                         }}
@@ -55,8 +56,8 @@ class AtmLayer extends Component {
                             width: 17
                         }}
                         railStyle={{
-                            // backgroundColor: '#84b3d1',
-                            backgroundColor: '#dae6f2',
+                            backgroundColor: '#84b3d1',
+                            // backgroundColor: '#dae6f2',
                             marginTop: 1
                         }}
                         defaultValue={0}
