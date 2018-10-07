@@ -50,13 +50,13 @@ class App extends Component {
     this.changeStellarRadiation = this.changeStellarRadiation.bind(this);
   }
 
-  changeAlbedo(newValue){
+  changeAlbedo(newValue) {
     this.setState({
       planetaryAlbedo: newValue
     })
   }
 
-  changeStellarRadiation(newValue){
+  changeStellarRadiation(newValue) {
     this.setState({
       stellarRadiation: newValue
     })
@@ -107,20 +107,19 @@ class App extends Component {
         <br /><br /><br />
         <main role="main" className="container">
           <div className="row main-container">
-            <div className="col-sm-6">
-              <SingleSettingController>
-                <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation}/>
-              </SingleSettingController>
-              <SingleSettingController>
-                <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.state.changeAlbedo}/>
-              </SingleSettingController>
+            <div className="col-sm-6 box">
+                <SingleSettingController>
+                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} />
+                </SingleSettingController>
+                <SingleSettingController>
+                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.state.changeAlbedo} />
+                </SingleSettingController>
 
-              <SingleSettingController>
-                <LayerContainer layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
-                  <AtmLayer removeLayer={this.removeLayer} />
-                </LayerContainer>
-              </SingleSettingController>
-
+                <SingleSettingController position="last">
+                  <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
+                    <AtmLayer removeLayer={this.removeLayer} />
+                  </LayerContainer>
+                </SingleSettingController>
             </div>
             <div className="col-sm-6" style={s2}>
               Simulation

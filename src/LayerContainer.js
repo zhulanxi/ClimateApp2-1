@@ -36,12 +36,16 @@ class LayerContainer extends Component {
         )
 
         return (
-            <div className='layer-container' >
-                <div className='container-spacer'></div>
-                {layerBoxes}
-                {layerAdder}
-            </div>
-        );
+            // <div className="box">
+            <React.Fragment>
+                <p className='box-content'>{this.props.settingName}</p>
+                <div className='layer-container box-filler' >
+                    <div className='container-spacer'></div>
+                    {layerBoxes}
+                    {layerAdder}
+                </div>
+            </React.Fragment>
+            );
     }
 }
 

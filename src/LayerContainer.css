@@ -1,7 +1,22 @@
 .layer-container{
-    height:100%
+    display: block;
+    height: 100%;
 }
 
 .container-spacer {
     height: 2.5%;
+}
+
+.box{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.box .box-content{
+    flex: 0 1 auto;
+}
+
+.box .box-filler{
+    flex: 1 1 auto;
 }
