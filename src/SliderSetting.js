@@ -30,7 +30,7 @@ class SliderSetting extends Component {
                         backgroundColor: '#84b3d1',
                         marginTop: 1
                     }}
-                    defaultValue={0}
+                    defaultValue={this.props.setting}
                     onChange={this.props.handler} />
             </div>
         );

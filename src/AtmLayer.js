@@ -31,7 +31,7 @@ class AtmLayer extends Component {
             <div className="atm-layer">
                 {/* <div className="header-line d-flex justify-content-center align-items-center"> */}
                 <div className="header-line">
-                    <span className="layer-name"><b>{this.props.layer.name}</b></span>
+                    <span className="layer-name"><b>Layer {this.props.layer.layerNumber}</b></span>
                     <span className="layer-tools">
                         <button type="button" onClick={this.handleRemoveLayer} className="layer-button">
                             <FaTimes size={14} />
@@ -44,7 +44,7 @@ class AtmLayer extends Component {
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
-                        step={0.1}
+                        step={0.01}
                         trackStyle={{
                             // backgroundColor: '#4f97c5',
                             backgroundColor: '#4f97c5',
@@ -60,7 +60,7 @@ class AtmLayer extends Component {
                             // backgroundColor: '#dae6f2',
                             marginTop: 1
                         }}
-                        defaultValue={0}
+                        defaultValue={this.state.alpha}
                         onChange={value => this.setState({alpha: value})} /></div>
                 </div>
             </div>

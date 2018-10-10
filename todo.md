@@ -1,8 +1,8 @@
 
--[ ] Style of slider
+-[X] Style of slider
 -[ ] Display value
 -[ ] bind to global state
 
--[ ] Format layers
+-[X] Format layers
 
 -[ ] Implement canvas

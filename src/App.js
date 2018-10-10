@@ -21,24 +21,24 @@ class App extends Component {
     super(props);
 
     var layer1 = {
-      name: "layer1",
+      layerNumber: 1,
       alpha: 0.7,
       beta: 0.3,
       gamma: 0.0,
       locked: false
     }
 
-    var layer2 = {
-      name: "layer2",
-      alpha: 0.2,
-      beta: 0.5,
-      gamma: 0.0,
-      locked: true
-    }
+    // var layer2 = {
+    //   layerNumber: 2,
+    //   alpha: 0.2,
+    //   beta: 0.5,
+    //   gamma: 0.0,
+    //   locked: true
+    // }
 
     this.state = {
-      stellarRadiation: 0,
-      planetaryAlbedo: 0,
+      stellarRadiation: 3,
+      planetaryAlbedo: 0.2,
       nameCount: 3,
       layers: [layer1]
     };
@@ -64,7 +64,7 @@ class App extends Component {
 
   addNewDefaultLayer() {
     var newLayer = {
-      name: "layer" + this.state.nameCount,
+      layerNumber: this.state.layers.length+1,
       alpha: 0.5,
       beta: 0.5,
       gamma: 0.5,
@@ -88,9 +88,20 @@ class App extends Component {
 
     // TODO, maybe it could help to have some validation
 
-    this.setState(prevState => ({
-      layers: prevState.layers.filter(layer => !Object.is(layer, delLayer))
-    }));
+    // this.setState(prevState => ({
+    //   layers: prevState.layers.filter(layer => !Object.is(layer, delLayer))
+    // }));
+
+    this.setState(prevState => {
+      console.log("Deleting layer "+delLayer.layerNumber +"em: "+delLayer.alpha)
+      var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
+      for (let layer of newLayers){
+        if(layer.layerNumber > delLayer.layerNumber){
+          layer.layerNumber--;
+        }
+      }
+      return {layers:newLayers};
+    })
   }
 
   render() {
@@ -112,7 +123,7 @@ class App extends Component {
                   <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} />
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.state.changeAlbedo} />
+                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} />
                 </SingleSettingController>
 
                 <SingleSettingController position="last">
