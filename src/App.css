@@ -38,3 +38,7 @@
   flex-direction: column;
 }
 
+.simulation-container {
+  background-color: white;
+}
+

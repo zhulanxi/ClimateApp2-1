@@ -7,6 +7,7 @@ import LayerContainer from './LayerContainer';
 import AtmLayer from './AtmLayer';
 import SingleSettingController from './SingleSettingController';
 import SliderSetting from './SliderSetting';
+import SimulationCanvas from './SimulationCanvas';
 
 
 /**
@@ -105,10 +106,6 @@ class App extends Component {
   }
 
   render() {
-    var s2 = {
-      background: "white"
-    }
-
     return (
       <div className="App">
         <header className="App-header">
@@ -118,7 +115,7 @@ class App extends Component {
         <br /><br /><br />
         <main role="main" className="container">
           <div className="row main-container">
-            <div className="col-sm-6 box">
+            <div className="col-sm-12 col-md-6 box">
                 <SingleSettingController>
                   <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} />
                 </SingleSettingController>
@@ -132,8 +129,9 @@ class App extends Component {
                   </LayerContainer>
                 </SingleSettingController>
             </div>
-            <div className="col-sm-6" style={s2}>
+            <div className="col-sm-6 simulation-container" >
               Simulation
+              <SimulationCanvas />
             </div>
           </div>
         </main>
