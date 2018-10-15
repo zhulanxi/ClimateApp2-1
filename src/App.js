@@ -65,7 +65,7 @@ class App extends Component {
 
   addNewDefaultLayer() {
     var newLayer = {
-      layerNumber: this.state.layers.length+1,
+      layerNumber: this.state.layers.length + 1,
       alpha: 0.5,
       beta: 0.5,
       gamma: 0.5,
@@ -94,14 +94,14 @@ class App extends Component {
     // }));
 
     this.setState(prevState => {
-      console.log("Deleting layer "+delLayer.layerNumber +"em: "+delLayer.alpha)
+      console.log("Deleting layer " + delLayer.layerNumber + "em: " + delLayer.alpha)
       var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
-      for (let layer of newLayers){
-        if(layer.layerNumber > delLayer.layerNumber){
+      for (let layer of newLayers) {
+        if (layer.layerNumber > delLayer.layerNumber) {
           layer.layerNumber--;
         }
       }
-      return {layers:newLayers};
+      return { layers: newLayers };
     })
   }
 
@@ -112,10 +112,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Climate App 2.0</h1>
         </header>
-        <br /><br /><br />
-        <main role="main" className="container">
-          <div className="row main-container">
-            <div className="col-sm-12 col-md-6 box">
+        <main role="main">
+          <div className="main-frame">
+
+            <div className="main-container">
+              <div className="setting-container">
                 <SingleSettingController>
                   <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} />
                 </SingleSettingController>
@@ -128,10 +129,11 @@ class App extends Component {
                     <AtmLayer removeLayer={this.removeLayer} />
                   </LayerContainer>
                 </SingleSettingController>
-            </div>
-            <div className="col-sm-6 simulation-container" >
-              Simulation
+              </div>
+              <div className="simulation-container" >
+                Simulation
               <SimulationCanvas />
+              </div>
             </div>
           </div>
         </main>

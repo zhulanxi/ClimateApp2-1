@@ -27,18 +27,32 @@
   to { transform: rotate(360deg); }
 }
 
+.main-frame{
+  padding:10px;
+}
+
 .main-container{
-  height: 580px;
+  max-width: 960px;
+  margin: 25px auto 15px auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* height: 580px; */
   box-shadow: 12px 0 15px -4px rgba(31, 73, 125, 0.8), -12px 0 15px -4px rgba(31, 73, 125, 0.8);
   background-color: #dae6f2;
 }
 
-.box{
+.setting-container{
+  flex: 1000 1 auto;
   display: flex;
   flex-direction: column;
 }
 
 .simulation-container {
+  flex: 1 0 auto;
   background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  /* width: 100%; */
 }
 
