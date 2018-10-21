@@ -94,8 +94,11 @@ class App extends Component {
     // }));
 
     this.setState(prevState => {
-      console.log("Deleting layer " + delLayer.layerNumber + "em: " + delLayer.alpha)
+      console.log("Deleting layer " + delLayer.layerNumber + ", em: " + delLayer.alpha)
       var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
+      for (let l of newLayers){
+        console.log("Remaing layers: "+ newLayers)
+      }
       for (let layer of newLayers) {
         if (layer.layerNumber > delLayer.layerNumber) {
           layer.layerNumber--;
