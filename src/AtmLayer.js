@@ -10,26 +10,23 @@ class AtmLayer extends Component {
     //This components should be enclosed in a SmallContainer
     constructor(props) {
         super(props);
-
-        this.state = {
-            alpha: props.layer.alpha,
-            beta: props.layer.beta,
-            gamma: props.layer.gamma
-        }
-
+    
         this.handleRemoveLayer = this.handleRemoveLayer.bind(this);
+        this.handleChangeAlpha = this.handleChangeAlpha.bind(this);
     }
 
+    handleChangeAlpha(newValue){
+        this.props.alphaHandler(this.props.layer.layerNumber, newValue);
+    }
 
     handleRemoveLayer() {
         this.props.removeLayer(this.props.layer);
     }
 
-    //TODO update local layer to global
     render() {
+        console.log("Rendered layer " +this.props.layer.layerNumber + "With default value" + this.props.layer.alpha);
         return (
             <div className="atm-layer">
-                {/* <div className="header-line d-flex justify-content-center align-items-center"> */}
                 <div className="header-line">
                     <span className="layer-name"><b>Layer {this.props.layer.layerNumber}</b></span>
                     <span className="layer-tools">
@@ -39,14 +36,12 @@ class AtmLayer extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                    {/* <span>Longwave Emissivity : {this.state.alpha.toFixed(2)}<InputRange maxValue={1} minValue={0} value={this.state.alpha} onChange={value => this.setState({alpha: value})} step={0.01}/></span> */}
-                    <p>Longwave Emissivity: {this.state.alpha.toFixed(2)}</p>
+                    <p>Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
                         step={0.01}
                         trackStyle={{
-                            // backgroundColor: '#4f97c5',
                             backgroundColor: '#4f97c5',
                             height: 7
                         }}
@@ -57,11 +52,11 @@ class AtmLayer extends Component {
                         }}
                         railStyle={{
                             backgroundColor: '#84b3d1',
-                            // backgroundColor: '#dae6f2',
                             marginTop: 1
                         }}
-                        defaultValue={this.state.alpha}
-                        onChange={value => this.setState({alpha: value})} /></div>
+                        defaultValue={this.props.layer.alpha}
+                        value={this.props.layer.alpha}
+                        onChange={(value) => this.handleChangeAlpha(value)} /></div>
                 </div>
             </div>
         );

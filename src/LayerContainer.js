@@ -13,13 +13,12 @@ class LayerContainer extends Component {
         //This is the list of layer boxes
         var layerBoxes = (
             this.props.layers.map((_layer, index) => {
-                const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer }); //Used to add props
+                const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
                 return (
                     <React.Fragment key={index}>
                         <SmallContainer>
                             {childrenWithProps}
                         </SmallContainer>
-                        {/* <div className='container-spacer'></div> */}
                     </React.Fragment>
                 )
             })

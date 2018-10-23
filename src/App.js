@@ -24,9 +24,6 @@ class App extends Component {
     var layer1 = {
       layerNumber: 1,
       alpha: 0.7,
-      beta: 0.3,
-      gamma: 0.0,
-      locked: false
     }
 
     // var layer2 = {
@@ -49,6 +46,21 @@ class App extends Component {
     this.removeLayer = this.removeLayer.bind(this);
     this.changeAlbedo = this.changeAlbedo.bind(this);
     this.changeStellarRadiation = this.changeStellarRadiation.bind(this);
+    this.changeAlpha = this.changeAlpha.bind(this);
+  }
+
+  changeAlpha(layerNumber, alphaValue){    
+    // 1. Make a shallow copy of the layers
+    let newLayers = [...this.state.layers];
+    // 2. Make a shallow copy of the item you want to mutate
+    let layer = {...newLayers[layerNumber-1]};
+    // 3. Replace the property you're intested in
+    layer.alpha = alphaValue;
+    // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
+    newLayers[layerNumber-1] = layer;
+    // 5. Set the state to our new copy
+    this.setState({layers: newLayers});
+
   }
 
   changeAlbedo(newValue) {
@@ -67,9 +79,6 @@ class App extends Component {
     var newLayer = {
       layerNumber: this.state.layers.length + 1,
       alpha: 0.5,
-      beta: 0.5,
-      gamma: 0.5,
-      locked: true
     }
     this.addNewLayer(newLayer);
   }
@@ -80,7 +89,6 @@ class App extends Component {
     }
 
     this.setState((prevState) => ({
-      nameCount: prevState.nameCount + 1,
       layers: [...prevState.layers, newLayer]
     }))
   }
@@ -89,15 +97,14 @@ class App extends Component {
 
     // TODO, maybe it could help to have some validation
 
-    // this.setState(prevState => ({
-    //   layers: prevState.layers.filter(layer => !Object.is(layer, delLayer))
-    // }));
-
     this.setState(prevState => {
       console.log("Deleting layer " + delLayer.layerNumber + ", em: " + delLayer.alpha)
+      // Create a shallow copy of the layers, without the deleted layer
       var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
       for (let l of newLayers){
-        console.log("Remaing layers: "+ newLayers)
+        console.log("Remaing layer: ")
+        console.log("  > Layer Number: "+ l.layerNumber);
+        console.log("  > EM: "+l.alpha);
       }
       for (let layer of newLayers) {
         if (layer.layerNumber > delLayer.layerNumber) {
@@ -128,7 +135,7 @@ class App extends Component {
                 </SingleSettingController>
 
                 <SingleSettingController position="last">
-                  <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer}>
+                  <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha}>
                     <AtmLayer removeLayer={this.removeLayer} />
                   </LayerContainer>
                 </SingleSettingController>
