@@ -21,18 +21,11 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // Default loaded example
     var layer1 = {
       layerNumber: 1,
       alpha: 0.7,
     }
-
-    // var layer2 = {
-    //   layerNumber: 2,
-    //   alpha: 0.2,
-    //   beta: 0.5,
-    //   gamma: 0.0,
-    //   locked: true
-    // }
 
     this.state = {
       stellarRadiation: 3,
@@ -98,14 +91,14 @@ class App extends Component {
     // TODO, maybe it could help to have some validation
 
     this.setState(prevState => {
-      console.log("Deleting layer " + delLayer.layerNumber + ", em: " + delLayer.alpha)
+      // console.log("Deleting layer " + delLayer.layerNumber + ", em: " + delLayer.alpha)
       // Create a shallow copy of the layers, without the deleted layer
       var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
-      for (let l of newLayers){
-        console.log("Remaing layer: ")
-        console.log("  > Layer Number: "+ l.layerNumber);
-        console.log("  > EM: "+l.alpha);
-      }
+      // for (let l of newLayers){
+      //   console.log("Remaing layer: ")
+      //   console.log("  > Layer Number: "+ l.layerNumber);
+      //   console.log("  > EM: "+l.alpha);
+      // }
       for (let layer of newLayers) {
         if (layer.layerNumber > delLayer.layerNumber) {
           layer.layerNumber--;
@@ -116,6 +109,7 @@ class App extends Component {
   }
 
   render() {
+    console.log("Rendered app.js");
     return (
       <div className="App">
         <header className="App-header">
@@ -142,7 +136,7 @@ class App extends Component {
               </div>
               <div className="simulation-container" >
                 Simulation
-              <SimulationCanvas />
+              <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers}/>
               </div>
             </div>
           </div>

@@ -3,23 +3,49 @@ import React, { Component } from 'react';
 class SimulationCanvas extends React.Component {
 
     componentDidMount() {
-        const canvas = this.refs.canvas
-        const ctx = canvas.getContext("2d")
-        // ctx.moveTo(0, 0);
-        // ctx.lineTo(425, 425);
-        // // ctx.lineTo(canvas.width, canvas.height);
-        // ctx.stroke();
+        console.log("CanvasDidMount")
+        this.drawSimulation();
+    }
+
+    componentDidUpdate() {
+        console.log("CanvasDidUpdate")
+        this.drawSimulation();
+
+    }
+
+    drawSimulation() {
+        const canvas = this.refs.canvas;
+        const ctx = canvas.getContext("2d");
+        const planetX = 212.5;
+        const planetY = 1050;
+        const planetRadius = 700;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let layer of this.props.layers) {
+            console.log("Rendered a layer");
+            ctx.beginPath();
+            ctx.arc(planetX, planetY, planetRadius + 100 + 10*layer.layerNumber, -Math.PI, Math.PI); 
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 5;
+            ctx.stroke()
+        }
+
+        ctx.font = "20px Arial";
+        ctx.fillText(this.props.planetaryAlbedo, 10, 230);
 
         ctx.beginPath();
-        ctx.arc(212.5,1050,700,-Math.PI,Math.PI);
+        ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
         ctx.fill();
-      }
+    }
+
 
 
     render() {
+        console.log("Rendered Canvas with albedo: " + this.props.planetaryAlbedo);
         return (
             <div>
-                <canvas ref="canvas" className="canvas-display" width={425} height={425} />
+                <canvas ref="canvas" className="canvas-display" width={400} height={475} />
             </div>
         )
     }
