@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {getSurfaceTemp, getLayerTemp} from './Calc.js'
 
 class SimulationCanvas extends React.Component {
 
@@ -20,6 +21,12 @@ class SimulationCanvas extends React.Component {
         const planetY = 1050;
         const planetRadius = 700;
 
+        const a = this.props.planetaryAlbedo;
+        const s = this.props.stellarRadiation;
+        const e1 = typeof this.props.layers[0] === "undefined" ? 0 : this.props.layers[0].alpha;
+        const e2 = typeof this.props.layers[1] === "undefined" ? 0 : this.props.layers[1].alpha;
+        const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (let layer of this.props.layers) {
@@ -32,15 +39,23 @@ class SimulationCanvas extends React.Component {
         }
 
         ctx.font = "20px Arial";
-        ctx.fillText(this.props.planetaryAlbedo, 10, 230);
+
+        for(let i=0; i<3; i++){
+            if(! (typeof this.props.layers[i] === "undefined")){
+                console.log("Output for layer: "+i);
+                ctx.fillText("T"+(i+1)+": "+getLayerTemp(i+1,a,s,e1,e2,e3), 10, 230-25*i);
+            }
+        }
+        
+
+        ctx.fillText("T0: "+getSurfaceTemp(a,s,e1,e2,e3),10,330);
 
         ctx.beginPath();
         ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
         ctx.fill();
     }
 
-
-
+    
     render() {
         console.log("Rendered Canvas with albedo: " + this.props.planetaryAlbedo);
         return (

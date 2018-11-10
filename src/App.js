@@ -17,7 +17,9 @@ import SimulationCanvas from './SimulationCanvas';
  */
 
 
+
 class App extends Component {
+
   constructor(props) {
     super(props);
 
@@ -28,8 +30,8 @@ class App extends Component {
     }
 
     this.state = {
-      stellarRadiation: 3,
-      planetaryAlbedo: 0.2,
+      stellarRadiation: 1,
+      planetaryAlbedo: 0.3,
       nameCount: 3,
       layers: [layer1]
     };
