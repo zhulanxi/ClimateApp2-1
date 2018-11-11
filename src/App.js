@@ -44,17 +44,17 @@ class App extends Component {
     this.changeAlpha = this.changeAlpha.bind(this);
   }
 
-  changeAlpha(layerNumber, alphaValue){    
+  changeAlpha(layerNumber, alphaValue) {
     // 1. Make a shallow copy of the layers
     let newLayers = [...this.state.layers];
     // 2. Make a shallow copy of the item you want to mutate
-    let layer = {...newLayers[layerNumber-1]};
+    let layer = { ...newLayers[layerNumber - 1] };
     // 3. Replace the property you're intested in
     layer.alpha = alphaValue;
     // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
-    newLayers[layerNumber-1] = layer;
+    newLayers[layerNumber - 1] = layer;
     // 5. Set the state to our new copy
-    this.setState({layers: newLayers});
+    this.setState({ layers: newLayers });
 
   }
 
@@ -138,11 +138,14 @@ class App extends Component {
               </div>
               <div className="simulation-container" >
                 Simulation
-              <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers}/>
+              <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
               </div>
             </div>
           </div>
         </main>
+        <footer className="App-footer">
+          <p>Anthony Courchesne | Nicolas Cowan | McGill University 2018</p>
+        </footer>
       </div>
     );
   }
