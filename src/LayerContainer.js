@@ -12,8 +12,9 @@ class LayerContainer extends Component {
 
         //This is the list of layer boxes
         var layerBoxes = (
-            this.props.layers.map((_layer, index) => {
-                const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
+            this.props.layers.slice(0).reverse().map((_layer, index) => {
+                // this.props.layers.map((_layer, index) => {
+                    const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
                 return (
                     <React.Fragment key={index}>
                         <SmallContainer>
@@ -30,7 +31,7 @@ class LayerContainer extends Component {
                 <SmallContainer>
                     <LayerAdder addNewDefaultLayer={this.props.addNewDefaultLayer} />
                 </SmallContainer>
-                <div className='container-spacer'></div>
+                {/* <div className='container-spacer'></div> */}
             </React.Fragment>
         )
 
@@ -40,8 +41,8 @@ class LayerContainer extends Component {
                 <p className='box-content'>{this.props.settingName}</p>
                 <div className='layer-container box box-filler' >
                     {/* <div className='container-spacer'></div> */}
-                    {layerBoxes}
                     {layerAdder}
+                    {layerBoxes}
                 </div>
             </React.Fragment>
             );

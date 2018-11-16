@@ -10,12 +10,12 @@ class AtmLayer extends Component {
     //This components should be enclosed in a SmallContainer
     constructor(props) {
         super(props);
-    
+
         this.handleRemoveLayer = this.handleRemoveLayer.bind(this);
         this.handleChangeAlpha = this.handleChangeAlpha.bind(this);
     }
 
-    handleChangeAlpha(newValue){
+    handleChangeAlpha(newValue) {
         this.props.alphaHandler(this.props.layer.layerNumber, newValue);
     }
 
@@ -24,7 +24,7 @@ class AtmLayer extends Component {
     }
 
     render() {
-        console.log("Rendered layer " +this.props.layer.layerNumber + "With default value" + this.props.layer.alpha);
+        // console.log("Rendered layer " + this.props.layer.layerNumber + "With default value" + this.props.layer.alpha);
         return (
             <div className="atm-layer">
                 <div className="header-line">
@@ -47,8 +47,11 @@ class AtmLayer extends Component {
                         }}
                         handleStyle={{
                             borderColor: '#4f97c5',
-                            height: 17,
-                            width: 17
+                            borderWidth: 3,
+                            height: 20,
+                            width: 20,
+                            marginLeft: -14,
+                            marginTop: -7,
                         }}
                         railStyle={{
                             backgroundColor: '#84b3d1',

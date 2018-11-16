@@ -1,5 +1,5 @@
 .small-container {
-    flex: 0 1 96px;
+    flex: 0 1 auto;
     border-radius: 10px;
     margin-top: 5px;
     margin-bottom: 5px;

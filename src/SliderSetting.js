@@ -14,23 +14,32 @@ class SliderSetting extends Component {
             <div>
                 <p>{this.props.settingName}: {this.props.setting}</p>
                 <Slider
+                    marks={this.props.marks}
+                    dotStyle={{
+                        borderColor: '#4f97c5',
+                        bottom: '-3px',
+                        borderWidth: '2px'
+                    }}
                     min={0}
                     max={this.props.maxSettingValue}
-                    step={0.1}
+                    step={this.props.step}
                     trackStyle={{
                         backgroundColor: '#4f97c5',
                         height: 7
                     }}
                     handleStyle={{
                         borderColor: '#4f97c5',
-                        height: 17,
-                        width: 17
+                        borderWidth: 3,
+                        height: 25,
+                        width: 25,
+                        marginLeft: -14,
+                        marginTop: -8,
                     }}
                     railStyle={{
                         backgroundColor: '#84b3d1',
                         marginTop: 1
                     }}
-                    defaultValue={this.props.setting}
+                    defaultValue={this.props.default}
                     onChange={this.props.handler} />
             </div>
         );

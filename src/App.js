@@ -17,6 +17,19 @@ import SimulationCanvas from './SimulationCanvas';
  */
 
 
+const radiationMarks = {
+  0: 0,
+  20: 0.1,
+  40: <strong>1</strong>,
+  60:10,
+  80:100,
+  100:1000
+};
+
+const defaultMarks = {
+  0:0,
+  1:1
+}
 
 class App extends Component {
 
@@ -64,9 +77,30 @@ class App extends Component {
     })
   }
 
+  /**
+   * Given a value between 0 and 100, return a value on the scale between 10^-2 to 10^3
+   */
+  getLogScaleValue(x){
+    var ans = Math.pow(10,(x-40)/20)
+    if(ans < 1){
+      ans = ans.toFixed(2)
+    }else if(ans <10){
+      ans = ans.toFixed(1)
+    }else{
+      ans = ans.toFixed(0)
+    }
+    return ans;
+  }
+
+  reverseLogScale(x){
+    return 20*Math.log(x)+40
+  }
+
   changeStellarRadiation(newValue) {
+    console.log("changeStellarRad called with: "+newValue);
+    console.log("Returning value: "+this.getLogScaleValue(newValue))
     this.setState({
-      stellarRadiation: newValue
+      stellarRadiation: this.getLogScaleValue(newValue)
     })
   }
 
@@ -93,14 +127,7 @@ class App extends Component {
     // TODO, maybe it could help to have some validation
 
     this.setState(prevState => {
-      // console.log("Deleting layer " + delLayer.layerNumber + ", em: " + delLayer.alpha)
-      // Create a shallow copy of the layers, without the deleted layer
       var newLayers = prevState.layers.filter(layer => !Object.is(layer, delLayer));
-      // for (let l of newLayers){
-      //   console.log("Remaing layer: ")
-      //   console.log("  > Layer Number: "+ l.layerNumber);
-      //   console.log("  > EM: "+l.alpha);
-      // }
       for (let layer of newLayers) {
         if (layer.layerNumber > delLayer.layerNumber) {
           layer.layerNumber--;
@@ -124,10 +151,10 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={10} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} />
+                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={40} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks}/>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} />
+                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                 </SingleSettingController>
 
                 <SingleSettingController position="last">
