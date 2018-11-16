@@ -154,7 +154,7 @@ class App extends Component {
                   <SliderSetting settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={40} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks}/>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={1} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  <SliderSetting settingName="Planetary Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                 </SingleSettingController>
 
                 <SingleSettingController position="last">

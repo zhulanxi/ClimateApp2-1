@@ -1,5 +1,5 @@
 const sbc = 5.670367e-8;
-const decimals = 2;
+const decimals = 0;
 
   //Compute the temperatures
   /**
@@ -11,9 +11,9 @@ const decimals = 2;
     
     const s0 = s*1361/4;
 
-    console.log(`Params: a: ${a} s: ${s} s0: ${s0} e1: ${e1} e2: ${e2} e3: ${e3}`)
+    // console.log(`Params: a: ${a} s: ${s} s0: ${s0} e1: ${e1} e2: ${e2} e3: ${e3}`)
     var temp = 2*(1-a)*(4-e1*e2-e1*e3-e2*e3+e1*e2*e3)*s0;
-    console.log("Numerator: "+temp);
+    // console.log("Numerator: "+temp);
     temp /= sbc*(2-e1)*(2-e2)*(2-e3);
 
     return Math.pow(temp,1/4).toFixed(decimals);
@@ -23,7 +23,7 @@ const decimals = 2;
  
     const s0 = s*1361/4;
 
-    console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
+    // console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
     var temp = (a-1)*(4+2*e2-2*e1*e2+2*e3-2*e1*e3-3*e2*e3+2*e1*e2*e3)*s0;
     temp /= sbc*(e1-2)*(e2-2)*(e3-2);
 
@@ -34,7 +34,7 @@ const decimals = 2;
 
     const s0 = s*1361/4;
 
-    console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
+    // console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
     var temp = (a-1)*(-2-e3+e2*e3)*s0;
     temp /= sbc*(e2-2)*(e3-2);
 
@@ -45,7 +45,7 @@ const decimals = 2;
 
     const s0 = s*1361/4;
 
-    console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
+    // console.log(`Params: a: ${a} s: ${s} e1: ${e1} e2: ${e2} e3: ${e3}`)
     var temp = (a-1)*s0;
     temp /= sbc*(e3-2);
 

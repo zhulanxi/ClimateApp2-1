@@ -1,5 +1,12 @@
 import React from 'react';
-import {getSurfaceTemp, getLayerTemp} from './Calc.js'
+import { getSurfaceTemp, getLayerTemp } from './Calc.js'
+
+const unicodeSubscriptDict = {
+    0: '₀',
+    1: '₁',
+    2: '₂',
+    3: '₃'
+}
 
 class SimulationCanvas extends React.Component {
 
@@ -29,35 +36,67 @@ class SimulationCanvas extends React.Component {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        for (let layer of this.props.layers) {
-            console.log("Rendered a layer");
-            ctx.beginPath();
-            ctx.arc(planetX, planetY, planetRadius + 100 + 10*layer.layerNumber, -Math.PI, Math.PI); 
-            ctx.strokeStyle = "blue";
-            ctx.lineWidth = 5;
-            ctx.stroke()
-        }
+        // for (let layer of this.props.layers) {
+
+        //     console.log("Rendered a layer");
+        //     ctx.beginPath();
+        //     ctx.arc(planetX, planetY, planetRadius + 100 + 10 * layer.layerNumber, -Math.PI, Math.PI);
+        //     ctx.strokeStyle = "blue";
+        //     ctx.lineWidth = 5;
+        //     ctx.stroke()
+        // }
 
         ctx.font = "20px Arial";
 
-        for(let i=0; i<3; i++){
-            if(! (typeof this.props.layers[i] === "undefined")){
-                console.log("Output for layer: "+i);
-                ctx.fillText("T"+(i+1)+": "+getLayerTemp(i+1,a,s,e1,e2,e3), 10, 230-25*i);
+        for (let i = 0; i < 3; i++) {
+            if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
+                // console.log("Output for layer: " + i);
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(planetX, planetY, planetRadius + 100 + 10 * i, -Math.PI, Math.PI);
+                ctx.strokeStyle = "blue";
+                ctx.lineWidth = 5;
+                ctx.stroke()
+
+                // ctx.strokeStyle = "black";
+                // ctx.lineWidth=0.5;
+                // var tx = 250
+                // var ty = 250 - 25 * i
+                // ctx.clearRect(tx-10,ty-17,100,20)
+                // ctx.rect(tx-10,ty-17,100,20)
+                // ctx.stroke()
+                // ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + getLayerTemp(i + 1, a, s, e1, e2, e3) + "K", tx, ty);
             }
         }
-        
 
-        ctx.fillText("T0: "+getSurfaceTemp(a,s,e1,e2,e3),10,330);
+        for (let i = 0; i < 3; i++) {
+            if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 0.5;
+                let tx = 290
+                let ty = 280 - 25 * i
+                ctx.clearRect(tx - 10, ty - 17, 100, 20)
+                ctx.rect(tx - 10, ty - 17, 100, 20)
+                ctx.stroke()
+                ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + getLayerTemp(i + 1, a, s, e1, e2, e3) + "K", tx, ty);
+            }
+        }
+
+        let tx = 15
+        let ty = 330
+        ctx.clearRect(tx - 10, ty - 17, 100, 20)
+        ctx.rect(tx - 10, ty - 17, 100, 20)
+        ctx.stroke()
+        ctx.fillText("T" + unicodeSubscriptDict[0] + "= " + getSurfaceTemp(a, s, e1, e2, e3) + "K", tx, ty);
 
         ctx.beginPath();
         ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
         ctx.fill();
     }
 
-    
+
     render() {
-        console.log("Rendered Canvas with albedo: " + this.props.planetaryAlbedo);
+        // console.log("Rendered Canvas with albedo: " + this.props.planetaryAlbedo);
         return (
             <div>
                 <canvas ref="canvas" className="canvas-display" width={400} height={475} />
