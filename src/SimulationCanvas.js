@@ -33,55 +33,55 @@ class SimulationCanvas extends React.Component {
         const e1 = typeof this.props.layers[0] === "undefined" ? 0 : this.props.layers[0].alpha;
         const e2 = typeof this.props.layers[1] === "undefined" ? 0 : this.props.layers[1].alpha;
         const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // for (let layer of this.props.layers) {
-
-        //     console.log("Rendered a layer");
-        //     ctx.beginPath();
-        //     ctx.arc(planetX, planetY, planetRadius + 100 + 10 * layer.layerNumber, -Math.PI, Math.PI);
-        //     ctx.strokeStyle = "blue";
-        //     ctx.lineWidth = 5;
-        //     ctx.stroke()
-        // }
+        const ei = [e1,e2,e3]
 
         ctx.font = "20px Arial";
 
+
+        // Clear the canvas to draw new simulation
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the Global (Thick) atmosphere
+        ctx.beginPath();
+        ctx.arc(planetX,planetY, planetRadius + 170 , -Math.PI, Math.PI)
+        ctx.strokeStyle = "#99ccff"
+        ctx.lineWidth = 55
+        ctx.stroke()
+
+        var maxLayer = 0;
+        // Draw the multiple atmospheric layers
         for (let i = 0; i < 3; i++) {
-            if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
-                // console.log("Output for layer: " + i);
-                ctx.lineWidth = 1;
+            // if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
+            if (ei[i] !== 0) {
+                maxLayer = i;
                 ctx.beginPath();
-                ctx.arc(planetX, planetY, planetRadius + 100 + 10 * i, -Math.PI, Math.PI);
+                ctx.arc(planetX, planetY, planetRadius + 150 + 20 * i, -Math.PI, Math.PI);
                 ctx.strokeStyle = "blue";
                 ctx.lineWidth = 5;
                 ctx.stroke()
-
-                // ctx.strokeStyle = "black";
-                // ctx.lineWidth=0.5;
-                // var tx = 250
-                // var ty = 250 - 25 * i
-                // ctx.clearRect(tx-10,ty-17,100,20)
-                // ctx.rect(tx-10,ty-17,100,20)
-                // ctx.stroke()
-                // ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + getLayerTemp(i + 1, a, s, e1, e2, e3) + "K", tx, ty);
             }
         }
 
+        // Space to output temperatures, not really necessary
+        ctx.clearRect(300, 208-25*maxLayer, 100, 100)
+
+        // Draw temperature label at each layer
         for (let i = 0; i < 3; i++) {
-            if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
+            if (ei[i] !== 0) {
+                ctx.beginPath()
                 ctx.strokeStyle = "black";
                 ctx.lineWidth = 0.5;
-                let tx = 290
-                let ty = 280 - 25 * i
+                let tx = 310
+                let ty = 218 - 25 * i
                 ctx.clearRect(tx - 10, ty - 17, 100, 20)
+                ctx.clearRect(tx - 10, ty - 17, 100, 24)
                 ctx.rect(tx - 10, ty - 17, 100, 20)
                 ctx.stroke()
                 ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + getLayerTemp(i + 1, a, s, e1, e2, e3) + "K", tx, ty);
             }
         }
 
+        // Surface temperature label
         let tx = 15
         let ty = 330
         ctx.clearRect(tx - 10, ty - 17, 100, 20)
@@ -89,9 +89,11 @@ class SimulationCanvas extends React.Component {
         ctx.stroke()
         ctx.fillText("T" + unicodeSubscriptDict[0] + "= " + getSurfaceTemp(a, s, e1, e2, e3) + "K", tx, ty);
 
+        // Draw the planet
         ctx.beginPath();
         ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
         ctx.fill();
+
     }
 
 
