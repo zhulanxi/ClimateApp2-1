@@ -97,12 +97,10 @@ class App extends Component {
   }
 
   reverseLogScale(x){
-    return 20*Math.log(x)+40
+    return 20*Math.log10(x)+40
   }
 
   changeStellarRadiation(newValue) {
-    console.log("changeStellarRad called with: "+newValue);
-    console.log("Returning value: "+this.getLogScaleValue(newValue))
     this.setState({
       stellarRadiation: this.getLogScaleValue(newValue)
     })
@@ -155,7 +153,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={40} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks}/>
+                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={40} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
                 </SingleSettingController>
                 <SingleSettingController>
                   <SliderSetting settingName="Planetary Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>

@@ -12,7 +12,7 @@ class SliderSetting extends Component {
 
         return (
             <div>
-                <p>{this.props.settingName}: {this.props.setting}</p>
+                <p>{this.props.settingName}: {this.props.setting} {this.props.units}</p>
                 <Slider
                     marks={this.props.marks}
                     dotStyle={{

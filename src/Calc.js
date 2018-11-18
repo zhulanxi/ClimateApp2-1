@@ -61,15 +61,18 @@ const decimals = 0;
    * @param {float} e2 """"
    * @param {float} e3 """"
    */
-  export function getLayerTemp(layerNumber, a, s, e1, e2, e3){
+  export function getLayerTemp(layerNumber, a, s, ei){
+    var e1 = ei[0]
+    var e2 = ei[1]
+    var e3 = ei[2]
       switch(layerNumber){
-            case 1:
+            case 0:
                 return getLayer1Temp(a,s,e1,e2,e3);
-            case 2:
+            case 1:
                 return getLayer2Temp(a,s,e1,e2,e3);
-            case 3:
+            case 2:
                 return getLayer3Temp(a,s,e1,e2,e3); 
             default:
-                console.log("Error, invalid layer number");
+                console.log("Error, invalid layer number: "+layerNumber);
       }
   }
