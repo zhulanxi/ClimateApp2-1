@@ -1,6 +1,6 @@
 import React from 'react';
 import { getSurfaceTemp, getLayerTemp } from './Calc.js'
-import { FaRegistered } from 'react-icons/fa';
+// import { FaRegistered } from 'react-icons/fa';
 
 const unicodeSubscriptDict = {
     0: '₀',
@@ -93,7 +93,6 @@ class SimulationCanvas extends React.Component {
         ctx.lineWidth = 62
         ctx.stroke()
 
-        var maxLayer = -1;
         // Draw the multiple atmospheric layers
         for (let i = 0; i < 3; i++) {
             // if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
@@ -155,7 +154,7 @@ class SimulationCanvas extends React.Component {
 
 // Source: https://stackoverflow.com/a/26080467
 function drawArrow(ctx, fromx, fromy, tox, toy, width, color){
-    if(width == 0) return;
+    if(width === 0) return;
     //variables to be used when creating the arrow
     var headlen = 10;
 
@@ -244,20 +243,20 @@ function getSurfaceEmissionWidth(temp){
 
 function getEscapingSurfaceEmissionWidth(temp, ei){
     var emul = (1-ei[0])*(1-ei[1])*(1-ei[2])
-    emul = (emul == 0 ) ? 0.001 : emul;
+    emul = (emul === 0 ) ? 0.001 : emul;
 
     return getSurfaceEmissionWidth(temp)*(emul)+2
 }
 
 
-function getAtmosphericRadiationWidth(ei){
-    const maxWidth = 20
-    const minWidth = 3
+// function getAtmosphericRadiationWidth(ei){
+//     const maxWidth = 20
+//     const minWidth = 3
 
-    var emul = ei[0]*ei[1]*ei[2]
+//     var emul = ei[0]*ei[1]*ei[2]
 
-    return (maxWidth-minWidth) * emul+minWidth;
-}
+//     return (maxWidth-minWidth) * emul+minWidth;
+// }
 
 function getAtmosphericRadiationTopWidth(surfaceTemp,layerTemps,ei){
     const maxWidth = 15
