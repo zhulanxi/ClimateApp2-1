@@ -93,11 +93,12 @@ class SimulationCanvas extends React.Component {
         ctx.lineWidth = 62
         ctx.stroke()
 
+        // maxLayer = -1
         // Draw the multiple atmospheric layers
         for (let i = 0; i < 3; i++) {
             // if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
             if (ei[i] !== 0) {
-                maxLayer = i;
+                // maxLayer = i;
                 ctx.beginPath();
                 ctx.arc(planetX, planetY, planetRadius + 150 + 20 * i, -Math.PI, Math.PI);
                 ctx.strokeStyle = "blue";
