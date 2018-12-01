@@ -82,8 +82,9 @@ class SimulationCanvas extends React.Component {
         }
 
         // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 200, 270, 290, getAtmosphericRadiationWidth(ei), longwaveColor )
-        drawArrow(ctx, 270, 155, 270, 65, getAtmosphericRadiationWidth(ei), longwaveColor )
+        drawArrow(ctx, 270, 200, 270, 290, getAtmosphericRadiationBotWidth(surfaceTemp, layerTemps, ei), longwaveColor )
+        drawArrow(ctx, 270, 155, 270, 65, getAtmosphericRadiationTopWidth(surfaceTemp, layerTemps, ei), longwaveColor )
+        // console.log("TESTVALUE: "+getAtmosphericRadiationTopWidth(surfaceTemp, layerTemps, ei))
 
         // Draw the Global (Thick) atmosphere
         ctx.beginPath();
@@ -154,6 +155,7 @@ class SimulationCanvas extends React.Component {
 
 // Source: https://stackoverflow.com/a/26080467
 function drawArrow(ctx, fromx, fromy, tox, toy, width, color){
+    if(width == 0) return;
     //variables to be used when creating the arrow
     var headlen = 10;
 
@@ -226,11 +228,13 @@ function getLayerWidth(e){
 }
 
 function getSurfaceEmissionWidth(temp){
-    const maxWidth = 30
-    const minWidth = 10
+    const maxWidth = 23
+    const minWidth = 4
 
     const maxTemp = 2213
     const minTemp = 88
+    temp = (temp < minTemp) ? minTemp : temp;
+    temp = (temp > maxTemp) ? maxTemp : temp;
 
     // Get a value between 0 and 1
     const relativeTemp = (temp - minTemp) / (maxTemp - minTemp)
@@ -255,27 +259,42 @@ function getAtmosphericRadiationWidth(ei){
     return (maxWidth-minWidth) * emul+minWidth;
 }
 
-// function getAtmosphericRadiationWidth(layerTemps, ei){
-//     const maxWidth = 20
-//     const minWidth = 10
+function getAtmosphericRadiationTopWidth(surfaceTemp,layerTemps,ei){
+    const maxWidth = 15
+    const minWidth = 0
 
-//     const maxTemp = Math.log10(5486)
-//     const minTemp = Math.log10(65)
+    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0];
+    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1];
+    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2];
 
-//     var totalTemp = 0
+    console.log("T1: "+t1+", t2: "+t2+", t3: "+t3);
 
-//     for(let i = 0; i < 3; i++){
-//         console.log("TTT"+totalTemp)
-//         if(ei[i] == 0){
-//             totalTemp+=parseInt(200)
-//         }else{
-//             totalTemp+=parseInt(layerTemps[i])
-//         }
-//     }
-//     console.log("T: " +totalTemp)
-//     var relativeTemp = (totalTemp - minTemp) / (maxTemp - minTemp)
-//     console.log(relativeTemp)
-//     return (maxWidth - minWidth) * relativeTemp + minWidth
-// }
+    var value = Math.pow(t1,1/4)*ei[0]*(1-ei[1])*(1-ei[2]) + Math.pow(t2,1/4)*ei[1]*(1-ei[2]) + Math.pow(t3,1/4)*ei[2]
+
+    const maxVal = 10;
+    const minVal = 0;
+    var relativeVal = (value - minVal) / (maxVal - minVal)
+
+    return (maxWidth-minWidth) * relativeVal+minWidth;
+}
+
+function getAtmosphericRadiationBotWidth(surfaceTemp,layerTemps,ei){
+    const maxWidth = 15
+    const minWidth = 0
+
+    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0];
+    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1];
+    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2];
+
+    // console.log("T1: "+t1+", t2: "+t2+", t3: "+t3);
+
+    var value = Math.pow(t1,1/4)*ei[0] + Math.pow(t2,1/4)*ei[1]*(1-ei[0]) + Math.pow(t3,1/4)*ei[2]*(1-ei[1])*(1-ei[0])
+    // console.log("@@"+value)
+    const maxVal = 10;
+    const minVal = 0;
+    var relativeVal = (value - minVal) / (maxVal - minVal)
+
+    return (maxWidth-minWidth) * relativeVal+minWidth;
+}
 
 export default SimulationCanvas
