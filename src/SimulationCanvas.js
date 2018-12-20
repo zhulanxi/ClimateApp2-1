@@ -1,5 +1,6 @@
 import React from 'react';
-import { getSurfaceTemp, getLayerTemp } from './Calc.js'
+import { getSurfaceTemp, getLayerTemp, getMaxSurfaceTemp, getMinSurfaceTemp, maxInsolation, minInsolation } from './Calc.js'
+
 // import { FaRegistered } from 'react-icons/fa';
 
 const unicodeSubscriptDict = {
@@ -31,6 +32,7 @@ class SimulationCanvas extends React.Component {
 
         const a = this.props.planetaryAlbedo;
         const s = this.props.stellarRadiation;
+        const s0 = s*1361/4;
         const e1 = typeof this.props.layers[0] === "undefined" ? 0 : this.props.layers[0].alpha;
         const e2 = typeof this.props.layers[1] === "undefined" ? 0 : this.props.layers[1].alpha;
         const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
@@ -74,17 +76,17 @@ class SimulationCanvas extends React.Component {
         }
 
         // Draw longwave planet emission
-        drawArrow(ctx, 165, 352, 165, 235, getSurfaceEmissionWidth(surfaceTemp), longwaveColor )
+        // drawArrow(ctx, 165, 352, 165, 235, getSurfaceEmissionWidth(surfaceTemp, s0), longwaveColor )
+        drawArrow(ctx, 165, 352, 165, 235, getLayerAbsorbedEmission(surfaceTemp, s0,ei), longwaveColor )
 
         // Draw longwave planet emission that is not absorbed by atmosphere
         if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
-            drawArrow(ctx, 215, 350, 215, 50, getEscapingSurfaceEmissionWidth(surfaceTemp,ei), longwaveColor)
+            drawArrow(ctx, 215, 350, 215, 50, getEscapingSurfaceEmissionWidth(surfaceTemp, s0, ei), longwaveColor)
         }
 
         // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 200, 270, 290, getAtmosphericRadiationBotWidth(surfaceTemp, layerTemps, ei), longwaveColor )
-        drawArrow(ctx, 270, 155, 270, 65, getAtmosphericRadiationTopWidth(surfaceTemp, layerTemps, ei), longwaveColor )
-        // console.log("TESTVALUE: "+getAtmosphericRadiationTopWidth(surfaceTemp, layerTemps, ei))
+        drawArrow(ctx, 270, 200, 270, 290, getAtmosphericRadiationBotWidth(layerTemps, ei, s0), longwaveColor )
+        drawArrow(ctx, 270, 155, 270, 65, getAtmosphericRadiationTopWidth(layerTemps, ei, s0), longwaveColor )
 
         // Draw the Global (Thick) atmosphere
         ctx.beginPath();
@@ -144,7 +146,6 @@ class SimulationCanvas extends React.Component {
 
 
     render() {
-        // console.log("Rendered Canvas with albedo: " + this.props.planetaryAlbedo);
         return (
             <div>
                 <canvas ref="canvas" className="canvas-display" width={400} height={475} />
@@ -201,17 +202,16 @@ function getPlanetColor(albedo){
     const minIntensity = 0
 
     var intensity = (maxIntensity - minIntensity) * albedo + minIntensity
-
     return rgb(intensity, intensity, intensity);
 }
 
 function getStellarWidth(stellarRad){
-    const maxWidth = 23
-    const minWidth = 4
+    //It was decided that the size of the arrow should be fixed since the variation would propagate to other arrows in too large scale
+    const maxWidth = 12
+    const minWidth = 12
 
     //Get a value between 0 and 1
     var linearRad = (20*Math.log10(stellarRad)+40)/100
-
     var width = (maxWidth - minWidth) * linearRad + minWidth
     return width.toFixed(2);
 }
@@ -223,77 +223,64 @@ function getReflectedStellarWidth(stellarRad, albedo){
 function getLayerWidth(e){
     const maxWidth = 10
     const minWidth = 2
-
     return (maxWidth-minWidth) * e + minWidth
 }
 
-function getSurfaceEmissionWidth(temp){
+function getSurfaceEmissionWidth(temp,s0){
+    // Update: Since at lower insolation the changes in the parameters would not be reflected
+    // on the width of the arrow, I divide by the 4th root of the insolation such that
+    // the value does not depend on it.
+
     const maxWidth = 23
     const minWidth = 4
-
-    const maxTemp = 2213
-    const minTemp = 88
+    temp = temp / Math.pow(s0,(1/4))
+    const maxTemp = getMaxSurfaceTemp() / Math.pow(maxInsolation * 1361 / 4, (1/4));
+    const minTemp = getMinSurfaceTemp() / Math.pow(minInsolation * 1361 / 4, (1/4));
     temp = (temp < minTemp) ? minTemp : temp;
     temp = (temp > maxTemp) ? maxTemp : temp;
 
     // Get a value between 0 and 1
     const relativeTemp = (temp - minTemp) / (maxTemp - minTemp)
-
     return (maxWidth-minWidth ) * relativeTemp + minWidth
 }
 
-function getEscapingSurfaceEmissionWidth(temp, ei){
+function getLayerAbsorbedEmission(temp, s0, ei){
     var emul = (1-ei[0])*(1-ei[1])*(1-ei[2])
-    emul = (emul === 0 ) ? 0.001 : emul;
-
-    return getSurfaceEmissionWidth(temp)*(emul)+2
+    return getSurfaceEmissionWidth(temp, s0)*(1-emul)
 }
 
+function getEscapingSurfaceEmissionWidth(temp,s0 , ei){
+    var emul = (1-ei[0])*(1-ei[1])*(1-ei[2])
+    return getSurfaceEmissionWidth(temp,s0)*(emul)
+}
 
-// function getAtmosphericRadiationWidth(ei){
-//     const maxWidth = 20
-//     const minWidth = 3
-
-//     var emul = ei[0]*ei[1]*ei[2]
-
-//     return (maxWidth-minWidth) * emul+minWidth;
-// }
-
-function getAtmosphericRadiationTopWidth(surfaceTemp,layerTemps,ei){
-    const maxWidth = 15
+function getAtmosphericRadiationTopWidth(layerTemps, ei, s0){
+    const maxWidth = 8
     const minWidth = 0
 
-    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0];
-    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1];
-    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2];
-
-    console.log("T1: "+t1+", t2: "+t2+", t3: "+t3);
+    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0] / Math.pow(s0,(1/4));
+    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1] / Math.pow(s0,(1/4));
+    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2] / Math.pow(s0,(1/4));
 
     var value = Math.pow(t1,1/4)*ei[0]*(1-ei[1])*(1-ei[2]) + Math.pow(t2,1/4)*ei[1]*(1-ei[2]) + Math.pow(t3,1/4)*ei[2]
-
-    const maxVal = 10;
+    const maxVal = 2.83;
     const minVal = 0;
     var relativeVal = (value - minVal) / (maxVal - minVal)
-
     return (maxWidth-minWidth) * relativeVal+minWidth;
 }
 
-function getAtmosphericRadiationBotWidth(surfaceTemp,layerTemps,ei){
-    const maxWidth = 15
+function getAtmosphericRadiationBotWidth(layerTemps,ei, s0){
+    const maxWidth = 8
     const minWidth = 0
 
-    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0];
-    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1];
-    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2];
-
-    // console.log("T1: "+t1+", t2: "+t2+", t3: "+t3);
+    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0] / Math.pow(s0,(1/4));
+    var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1] / Math.pow(s0,(1/4));
+    var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2] / Math.pow(s0,(1/4));
 
     var value = Math.pow(t1,1/4)*ei[0] + Math.pow(t2,1/4)*ei[1]*(1-ei[0]) + Math.pow(t3,1/4)*ei[2]*(1-ei[1])*(1-ei[0])
-    // console.log("@@"+value)
-    const maxVal = 10;
+    const maxVal = 3.04
     const minVal = 0;
     var relativeVal = (value - minVal) / (maxVal - minVal)
-
     return (maxWidth-minWidth) * relativeVal+minWidth;
 }
 

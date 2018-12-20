@@ -140,7 +140,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("Rendered app.js");
     return (
       <div className="App">
         <header className="App-header">
