@@ -172,7 +172,7 @@ class App extends Component {
           </div>
         </main>
         <footer className="App-footer">
-          <p>A. Courchesne | N. Cowan | McGill University 2018 | How does this work ?</p>
+          <p>A. Courchesne | N. Cowan | McGill University 2018 | <a href="ClimateAppInstructions.pdf">How does this work ?</a></p>
         </footer>
       </div>
     );
