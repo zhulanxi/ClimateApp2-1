@@ -74,13 +74,7 @@ class SimulationCanvas extends React.Component {
         ctx.fillStyle = shortwaveColor
         ctx.fill();
 
-        // Draw longwave planet emission
-        drawArrow(ctx, 190, 352, 190, 142, getSurfaceEmissionWidth(sbc,surfaceTemp, s0), longwaveColor )
 
-        // Draw longwave planet emission that is not absorbed by atmosphere
-        if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
-            drawArrow(ctx, 190, 352, 190, 50, getEscapingSurfaceEmissionWidth(sbc, surfaceTemp, s0, ei), longwaveColor)
-        }
 
         // Draw the planet
         ctx.beginPath();
@@ -89,11 +83,11 @@ class SimulationCanvas extends React.Component {
         ctx.fill();
 
         // Draw stellar radiation arrow
-        drawArrow(ctx, 18, 65, 35, 163, getStellarWidth(), shortwaveColor)
+        drawArrow(ctx, 18, 65, 30, 135, getStellarWidth(), shortwaveColor)
 
         //Draw stellar radiation arrow after absorption
         //From atm to ground is just d1 (down from layer 1)
-        drawArrow(ctx, 40,180, 70, 355, 
+        drawArrow(ctx, 40,180, 68, 330, 
             getAtmToGroundWidthFactor(s1, s2, s3, a1, a2, a3,a)*getStellarWidth(), shortwaveColor )
 //was 40 180
         // Draw reflected shortwave
@@ -105,13 +99,31 @@ class SimulationCanvas extends React.Component {
 
         //Draw shortwave from TOA to space
         //u3
-        drawArrow (ctx, 118, 200, 133, 70, 
+        drawArrow (ctx, 118, 200, 132, 77, 
             getEffectiveAlbedo(layerTemps, s1, s2, s3, a1, a2, a3,a)*getStellarWidth(),shortwaveColor)
         
 
-        // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 200, 270, 340, getAtmosphericRadiationBotWidth(sbc, layerTemps,s0,ei), longwaveColor )
-        drawArrow(ctx, 270, 155, 270, 40, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor )
+        // Draw longwave atmospheric downward emission
+        drawArrow(ctx, 180, 200, 180, 320, getAtmosphericRadiationBotWidth(sbc, layerTemps,s0,ei), longwaveColor )
+        //drawArrow(ctx, 270, 155, 270, 40, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor )
+
+        // Draw TOA to space longwave emission (TopWidth+escaping)
+        if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
+            drawArrow(ctx, 230, 200, 230, 50, getEscapingSurfaceEmissionWidth(sbc, surfaceTemp, s0, ei)+ getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
+        } else{
+            drawArrow(ctx, 230, 200, 230, 50, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
+        }
+
+
+        // Draw longwave planet emission
+        drawArrow(ctx, 290, 362, 290, 260, getSurfaceEmissionWidth(sbc,surfaceTemp, s0), longwaveColor )
+
+        // Draw the planet
+        ctx.beginPath();
+        ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
+        ctx.fillStyle = getPlanetColor(a);
+        ctx.fill();
+
 
         // Draw the Global (Thick) atmosphere
         ctx.beginPath();
@@ -155,6 +167,7 @@ class SimulationCanvas extends React.Component {
                 ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + layerTemps[i] + "K", tx, ty);
             }
         }
+        
 
         // Surface temperature label
         ctx.beginPath()
@@ -192,17 +205,14 @@ class SimulationCanvas extends React.Component {
 function drawArrow(ctx, fromx, fromy, tox, toy, width, color){
     if(width <= 0.5) return;
     //variables to be used when creating the arrow
-    var headlen = 15;
-    var angle = Math.atan((toy-fromy)/(tox-fromx));
-    var hypotenus = Math.pow(0.25*width*width+headlen*headlen,1/2);
-    //var totalLen = Math.sqrt(Math.pow(toy-fromy,2)+Math.pow(tox-fromx,2));
-    var deltaX = headlen*Math.cos(angle);
-    var deltaY = Math.tan(angle)*deltaX;
+    var headlen = 10;
+
+    var angle = Math.atan2(toy-fromy,tox-fromx);
 
     //starting path of the arrow from the start square to the end square and drawing the stroke
     ctx.beginPath();
     ctx.moveTo(fromx, fromy);
-    ctx.lineTo(tox-deltaX, toy-deltaY);
+    ctx.lineTo(tox, toy);
     ctx.strokeStyle = color;
     ctx.lineWidth = width;
     ctx.stroke();
@@ -210,18 +220,18 @@ function drawArrow(ctx, fromx, fromy, tox, toy, width, color){
     //starting a new path from the head of the arrow to one of the sides of the point
     ctx.beginPath();
     ctx.moveTo(tox, toy);
-    ctx.lineTo(tox-hypotenus*Math.cos(angle-Math.atan(0.42*width/headlen)),toy-hypotenus*Math.sin(angle-Math.atan(0.5*width/headlen)));
+    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
     //path from the side point of the arrow, to the other side point
-    ctx.lineTo(tox-hypotenus*Math.cos(angle+Math.atan(0.42*width/headlen)),toy-hypotenus*Math.sin(angle+Math.atan(0.5*width/headlen)));
+    ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
 
     //path from the side point back to the tip of the arrow, and then again to the opposite side point
     ctx.lineTo(tox, toy);
-    ctx.lineTo(tox-hypotenus*Math.cos(angle-Math.atan(0.42*width/headlen)),toy-hypotenus*Math.sin(angle-Math.atan(0.5*width/headlen)));
+    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
     //draws the paths created above
     ctx.strokeStyle = color;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = width;
     ctx.stroke();
     ctx.fillStyle = color;
     ctx.fill();
@@ -251,7 +261,7 @@ function getStellarWidth(){
     //var linearRad = (20*Math.log10(stellarRad)+40)/100
     //var width = (maxWidth - minWidth) * linearRad + minWidth
     //return width.toFixed(2);
-    return 35;
+    return 30;
 }
 
 
