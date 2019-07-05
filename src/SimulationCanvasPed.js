@@ -172,10 +172,10 @@ class SimulationCanvasPed extends React.Component {
         ctx.strokeStyle = "black";
         ctx.fillStyle = "black";
         ctx.lineWidth = 0.5;
-        let tx = 180
+        let tx = 175
         let ty = 380
-        ctx.clearRect(tx - 10, ty - 17, 229, 23)
-        ctx.rect(tx - 10, ty - 17, 229, 23)
+        ctx.clearRect(tx - 10, ty - 17, 235, 23)
+        ctx.rect(tx - 10, ty - 17, 235, 23)
         ctx.stroke()
         ctx.fillText("Surface temp. T" + unicodeSubscriptDict[0] + "= " + surfaceTempCel + "°C", tx, ty);
     }
