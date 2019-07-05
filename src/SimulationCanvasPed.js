@@ -42,7 +42,7 @@ class SimulationCanvasPed extends React.Component {
         const shortwaveColor = "#ffd11a"
         const longwaveColor = "#ff3333"
 
-        var surfaceTemp = parseInt(getSurfaceTemp(a, s, e1, e2, e3))
+        var surfaceTemp = parseInt(getSurfaceTemp(a, s, e1, e2, e3),10)
         const deltaTemp = getSurfaceTemp(a,s,e1,e2,e3)-getSurfaceTemp(a,s,0,0,0)
         var layerTemps = []
 
@@ -56,7 +56,7 @@ class SimulationCanvasPed extends React.Component {
 
         for (let i = 0; i < 3; i++) {
             if (ei[i] !== 0) {
-                layerTempsCel[i] = (parseInt(getLayerTemp(i, a, s, ei))-273.15).toFixed(0)
+                layerTempsCel[i] = (parseInt(getLayerTemp(i, a, s, ei),10)-273.15).toFixed(0)
             }
         }
        
