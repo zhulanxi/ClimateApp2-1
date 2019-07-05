@@ -13,15 +13,26 @@ class AtmLayer extends Component {
 
         this.handleRemoveLayer = this.handleRemoveLayer.bind(this);
         this.handleChangeAlpha = this.handleChangeAlpha.bind(this);
+        this.handleChangeOpa = this.handleChangeOpa.bind(this);//added
+        this.handleChangeSca = this.handleChangeSca.bind(this);//added
     }
 
     handleChangeAlpha(newValue) {
         this.props.alphaHandler(this.props.layer.layerNumber, newValue);
     }
+    
+    handleChangeOpa(newValue) {
+        this.props.opaHandler(this.props.layer.layerNumber, newValue);
+    }
+
+    handleChangeSca(newValue) {
+        this.props.scaHandler(this.props.layer.layerNumber, newValue);
+    }
 
     handleRemoveLayer() {
         this.props.removeLayer(this.props.layer);
     }
+
 
     render() {
         // console.log("Rendered layer " + this.props.layer.layerNumber + "With default value" + this.props.layer.alpha);
@@ -36,6 +47,54 @@ class AtmLayer extends Component {
                     </span>
                 </div>
                 <div className="core-line">
+                    <p>Shortwave Opacity: {this.props.layer.opa.toFixed(2)}</p>
+                    <div className="push-above"><Slider
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        trackStyle={{
+                            backgroundColor: '#4f97c5',
+                            height: 7
+                        }}
+                        handleStyle={{
+                            borderColor: '#4f97c5',
+                            borderWidth: 3,
+                            height: 20,
+                            width: 20,
+                            marginLeft: -14,
+                            marginTop: -7,
+                        }}
+                        railStyle={{
+                            backgroundColor: '#84b3d1',
+                            marginTop: 1
+                        }}
+                        defaultValue={this.props.layer.opa}
+                        value={this.props.layer.opa}
+                        onChange={(value) => this.handleChangeOpa(value)} /></div>
+                    <p>Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
+                    <div className="push-above"><Slider
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        trackStyle={{
+                            backgroundColor: '#4f97c5',
+                            height: 7
+                        }}
+                        handleStyle={{
+                            borderColor: '#4f97c5',
+                            borderWidth: 3,
+                            height: 20,
+                            width: 20,
+                            marginLeft: -14,
+                            marginTop: -7,
+                        }}
+                        railStyle={{
+                            backgroundColor: '#84b3d1',
+                            marginTop: 1
+                        }}
+                        defaultValue={this.props.layer.sca}
+                        value={this.props.layer.sca}
+                        onChange={(value) => this.handleChangeSca(value)} /></div>
                     <p>Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
                     <div className="push-above"><Slider
                         min={0}

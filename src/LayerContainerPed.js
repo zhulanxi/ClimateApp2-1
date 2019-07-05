@@ -6,7 +6,7 @@ import LayerAdder from './LayerAdder';
 /**
  * Contains the boxes for each layer and the logic to render them
  */
-class LayerContainer extends Component {
+class LayerContainerPed extends Component {
     render() {
 
 
@@ -14,7 +14,7 @@ class LayerContainer extends Component {
         var layerBoxes = (
             this.props.layers.slice(0).reverse().map((_layer, index) => {
                 // this.props.layers.map((_layer, index) => {
-                    const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler, opaHandler: this.props.opaHandler, scaHandler: this.props.scaHandler }); //Used to add props
+                    const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
                 return (
                     <React.Fragment key={index}>
                         <SmallContainer>
@@ -25,8 +25,8 @@ class LayerContainer extends Component {
             })
         )
 
-        //This is the plus box that should only appear if we have less than 3 layers
-        var layerAdder = Object.keys(this.props.layers).length >= 3 ? '' : (
+        //This is the plus box that should only appear if we have no atmospheric layer
+        var layerAdder = Object.keys(this.props.layers).length >= 1 ? '' : (
             <React.Fragment>
                 <SmallContainer>
                     <LayerAdder addNewDefaultLayer={this.props.addNewDefaultLayer} />
@@ -49,4 +49,4 @@ class LayerContainer extends Component {
     }
 }
 
-export default LayerContainer;
+export default LayerContainerPed;
