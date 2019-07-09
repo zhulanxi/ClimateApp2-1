@@ -302,7 +302,7 @@ class App extends Component {
                   </LayerContainerPed>
                 </SingleSettingController>
                 <SingleSettingController position = 'last'>
-                  <SliderSettingPed settingName="Planetary Refletivity" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedoPed} setting={this.state.planetaryAlbedoPed} handler={this.changeAlbedoPed} marks={defaultMarks}/>
+                  <SliderSettingPed settingName="Planetary Reflectivity" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedoPed} setting={this.state.planetaryAlbedoPed} handler={this.changeAlbedoPed} marks={defaultMarks}/>
                 </SingleSettingController>
 
                 
