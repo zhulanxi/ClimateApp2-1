@@ -266,7 +266,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiation)+2)*100/4} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
+                  <SliderSetting description="The amount of radiation from the star that reaches the planet,<br/> assumed to be completely within the shortwave range."settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiation)+2)*100/4} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
                 </SingleSettingController>
                 
 
@@ -276,7 +276,7 @@ class App extends Component {
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  <SliderSetting description="Planetary surface reflectivity to shortwave radiation,<br/> different from effective albedo." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                 </SingleSettingController>
               </div>
               <div className="simulation-container" >
@@ -294,7 +294,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSettingPed settingName="Solar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"S₀"}/>
+                  <SliderSettingPed description="The amount of radiation from the star that reaches the planet." settingName="Solar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"S₀"}/>
                 </SingleSettingController>
                 <SingleSettingController>
                   <LayerContainerPed settingName="Atmosphere" layers={this.state.layersPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
@@ -302,7 +302,7 @@ class App extends Component {
                   </LayerContainerPed>
                 </SingleSettingController>
                 <SingleSettingController position = 'last'>
-                  <SliderSettingPed settingName="Planetary Reflectivity" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedoPed} setting={this.state.planetaryAlbedoPed} handler={this.changeAlbedoPed} marks={defaultMarks}/>
+                  <SliderSettingPed description="How reflective the planet surface is to solar radiation.<br/> A value of 1 means complete reflection." settingName="Planetary Reflectivity" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedoPed} setting={this.state.planetaryAlbedoPed} handler={this.changeAlbedoPed} marks={defaultMarks}/>
                 </SingleSettingController>
 
                 

@@ -56,7 +56,7 @@ class AtmLayer extends Component {
                     data-delay-show='700'
                     data-multiline="true">
                         Shortwave Opacity: {this.props.layer.opa.toFixed(2)}</p>
-                    <ReactTooltip/>
+                        <ReactTooltip/>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
@@ -89,6 +89,7 @@ class AtmLayer extends Component {
                     data-delay-show='700'
                     data-multiline="true">
                         Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
+                    
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
@@ -120,6 +121,7 @@ class AtmLayer extends Component {
                     data-delay-show='700'
                     data-multiline="true">
                         Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
+                    
                     <div className="push-above"><Slider
                         min={0}
                         max={1}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 import './AtmLayer.css';
 // import { FaUnlockAlt, FaLock, FaUnlock, FaTimes } from 'react-icons/fa'
 import { FaTimes } from 'react-icons/fa';
@@ -36,7 +37,14 @@ class AtmLayerPed extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                    <p>Infrared Opacity: {this.props.layer.alpha.toFixed(2)}</p>
+                <p data-tip="How opaque the atmosphere is to thermal radiation<br/> and how effective it is in emitting thermal radiation." 
+                    data-place="left"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                        Infrared Opacity: {this.props.layer.alpha.toFixed(2)}</p>
+                        <ReactTooltip/>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}

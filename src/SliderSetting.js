@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactToolTip from 'react-tooltip';
 import './SliderSetting.css';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
@@ -12,7 +13,14 @@ class SliderSetting extends Component {
 
         return (
             <div>
-                <p>{this.props.settingName}: {this.props.setting} {this.props.units}</p>
+                <p data-tip={this.props.description} 
+                    data-place="left"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                    {this.props.settingName}: {this.props.setting} {this.props.units}</p>
+                    <ReactToolTip/>
                 <Slider
                     marks={this.props.marks}
                     dotStyle={{

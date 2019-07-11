@@ -116,11 +116,11 @@ class SimulationCanvasPed extends React.Component {
 
         
         // Draw stellar radiation arrow
-        drawArrow(ctx, 43, 57, 100, 328, getStellarWidth(), shortwaveColor)
+        drawArrow(ctx, 15, 65, 69, 330, getStellarWidth(), shortwaveColor)
 
         // Draw reflected shortwave
         if(a > 0){
-            drawArrow(ctx, 85, 355, 20, 270, getReflectedStellarWidth(a), shortwaveColor)
+            drawArrow(ctx, 85, 355, 145, 94, getReflectedStellarWidth(a), shortwaveColor)
         }
 
         // Draw longwave planet emission that is not absorbed by atmosphere
