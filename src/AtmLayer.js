@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 import './AtmLayer.css';
 // import { FaUnlockAlt, FaLock, FaUnlock, FaTimes } from 'react-icons/fa'
 import { FaTimes } from 'react-icons/fa';
@@ -47,7 +48,15 @@ class AtmLayer extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                    <p>Shortwave Opacity: {this.props.layer.opa.toFixed(2)}</p>
+                    <p data-tip="The total amount of incoming
+                    shortwave radiation that is<br/> absorbed or scattered by the atmospheric layer." 
+                    data-place="left"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                        Shortwave Opacity: {this.props.layer.opa.toFixed(2)}</p>
+                    <ReactTooltip/>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
@@ -71,7 +80,15 @@ class AtmLayer extends Component {
                         defaultValue={this.props.layer.opa}
                         value={this.props.layer.opa}
                         onChange={(value) => this.handleChangeOpa(value)} /></div>
-                    <p>Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
+                    <p data-tip="The proportionality between the amount of scattered radiation<br/>
+                     and the shortwave opacity
+                     of the atmospheric layer." 
+                    data-place="left"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                        Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
@@ -95,7 +112,14 @@ class AtmLayer extends Component {
                         defaultValue={this.props.layer.sca}
                         value={this.props.layer.sca}
                         onChange={(value) => this.handleChangeSca(value)} /></div>
-                    <p>Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
+                    <p data-tip="The atmospheric layer's effectiveness in emitting
+                     and <br/> absorbing energy in form of thermal radiation (longwave)." 
+                    data-place="left"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                        Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
                     <div className="push-above"><Slider
                         min={0}
                         max={1}
