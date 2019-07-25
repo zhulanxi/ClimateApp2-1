@@ -8,7 +8,7 @@ import Slider from 'rc-slider';
 
 
 class AtmLayerPed extends Component {
-    //This components should be enclosed in a SmallContainer
+    //This component should be enclosed in a SmallContainer
     constructor(props) {
         super(props);
 
@@ -29,7 +29,6 @@ class AtmLayerPed extends Component {
         return (
             <div className="atm-layer">
                 <div className="header-line">
-                    
                     <span className="layer-tools">
                         <button type="button" onClick={this.handleRemoveLayer} className="layer-button">
                             <FaTimes size={14} />
@@ -37,8 +36,9 @@ class AtmLayerPed extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                <p data-tip="How opaque the atmosphere is to thermal radiation<br/> and how effective it is in emitting thermal radiation." 
-                    data-place="left"
+                <p data-tip="The fraction of incident thermal radiation absorbed by the atmosphere.<br/>
+                A value of 1 means that the atmosphere absorbs all thermal radiation and re-emits them all." 
+                    data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
@@ -58,7 +58,7 @@ class AtmLayerPed extends Component {
                             borderWidth: 3,
                             height: 20,
                             width: 20,
-                            marginLeft: -14,
+                            marginLeft:-10,
                             marginTop: -7,
                         }}
                         railStyle={{

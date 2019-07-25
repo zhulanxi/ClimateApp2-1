@@ -1,17 +1,17 @@
-const sbc = 5.670367e-8;
-const decimals = 0;
-export const maxInsolation = 100;
-export const minInsolation = 0.01;
-const maxAlbedo = 0.99;
+const sbc = 5.670367e-8;//Stefan-Boltzmann constant
+const decimals = 0;//for temperature display
+//export const maxInsolation = 100;
+//export const minInsolation = 0.01;
+//const maxAlbedo = 0.99;
 
 
 //Compute the temperatures
 
 /**
 
- * a: Planetary albedo (0-1)
+ * a: Planetary albedo (0-0.99)
 
- * n: Stellar radiation (0-10), 1 is equal to stellar radiation on the earth
+ * n: Stellar radiation (0.01-100), 1 is equal to stellar radiation on the earth
 
  * elwi: long wave emissivity of layer i. Set to 0 if no such layer
  
@@ -21,172 +21,7 @@ const maxAlbedo = 0.99;
 
  */
 
-export function getSurfaceTemp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
-//where n is n times solar radiation
-
-  const s0 = n * 1361 / 4;
-  const Tirr = s0/sbc; //Tirr^4
-  const surf = Tirr*4.0*(a3*s3 - 2.0*s3
-    + 2.0)*(4.0*A
-            + 2.0*a1*s1*(A - 1.0)
-                           + a2*s2*(A - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                           - 4.0*s1*(A - 1.0) - 2.0*s2*(A - 1.0)
-                           *(a1*s1 - 2.0*s1 + 2.0) 
-                           - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                   - 4.0*A*a1**2*a2*s1**2*s2
-                                   - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                          - 2.0*s2 + 2.0)**2
-                                   - 4.0*A*a1*a2*a3*s1*s2*s3 + 16.0*A*a1*s1
-                                   - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 +
-                                                          2.0)**2
-                                   + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                   + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                        - 2.0*s2 + 2.0)**2
-                                   - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                   + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                        - 2.0*s2 + 2.0)**2
-                                   + 8.0*a2*a3*s2*s3 - 32.0);
-  const l1 = Tirr*4.0*s1*(a3*s3
-    - 2.0*s3 + 2.0)*(-A*a1*a2*s1*s2*(a1 - 1.0)
-                     + 2.0*A*a1*s1*s2*(a1 - 1.0)
-                     + A*a2*s2*(a1 - 1.0)*(a1*s1
-                                           - 2.0*s1 + 2.0)
-                     - 4.0*A*s1*(a1 - 1.0) - 2.0*A*s2*(a1
-                                                       - 1.0)*(a1*s1
-                                                               - 2.0*s1 + 2.0)
-                     + 4.0*A*(a1 - 1.0) + 4.0*a1 + 2.0*a2*s2*(a1 - 1.0)
-                     - 4.0*s2*(a1 - 1.0) - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                 - 4.0*A*a1**2*a2*s1**2*s2
-                                                 - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                                        - 2.0*s2 + 2.0)**2
-                                                 - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                 + 16.0*A*a1*s1
-                                                 - A*a2**2*a3*s2**2*s3*(a1*s1
-                                                                        - 2.0*s1 + 2.0)**2
-                                                 + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                 + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                      - 2.0*s2 + 2.0)**2
-                                                 - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                 + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                                      - 2.0*s2 + 2.0)**2
-                                                 + 8.0*a2*a3*s2*s3 - 32.0);
-    const l2 = Tirr*4.0*s2*(a3*s3
-      - 2.0*s3 + 2.0)*(A*a1**2*s1**2*s2*(a2 - 1.0)
-                       - A*a1**2*s1**2*(a2 - 1.0)
-                       + A*a1*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                       - 2.0*A*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                       - 4.0*A*s1*(a2 - 1.0) - A*s2*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)**2
-                       + 4.0*A*(a2 - 1.0) - 2.0*a1*s1*s2*(a2 - 1.0)
-                       + 2.0*a1*s1*(a2 - 1.0) + 4.0*a2 - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                               - 4.0*A*a1**2*a2*s1**2*s2
-                                                               - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                               - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                               + 16.0*A*a1*s1
-                                                               - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                                    - 2.0*s2
-                                                                                                    + 2.0)**2
-                                                               - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-                                                               + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                               + 8.0*a2*a3*s2*s3 - 32.0);
-  const l3 = Tirr*s3*((-a3 + 1.0)*(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-    - 4.0*A*a1**2*a2*s1**2*s2
-    - A*a1**2*a3*s1**2*s3*(a2*s2
-                           - 2.0*s2 + 2.0)**2
-    - 4.0*A*a1*a2*a3*s1*s2*s3
-    + 16.0*A*a1*s1 - A*a2**2*a3*s2**2*s3*(a1*s1
-                                          - 2.0*s1 + 2.0)**2
-    + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-    + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-    - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-    + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-    + 8.0*a2*a3*s2*s3 - 32.0) + (a3 - 1.0)*(a3*s3
-                                            - 2.0*s3 + 2.0)*(A*a1**2*a2**2*s1**2*s2**2
-                                                             - A*a1**2*a2*s1**2*s2*(a2*s2
-                                                                                    - 2.0*s2 + 2.0)
-                                                             - 2.0*A*a1**2*a2*s1**2*s2
-                                                             + 2.0*A*a1**2*s1**2*s2*(a2*s2
-                                                                                     - 2.0*s2 + 2.0)
-                                                             + 4.0*A*a1**2*s1**2*s2
-                                                             - 4.0*A*a1**2*s1**2
-                                                             - 4.0*A*a1*a2*s1*s2
-                                                             + 4.0*A*a1*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                             + 8.0*A*a1*s1
-                                                             - A*a2**2*s2**2*(a1*s1
-                                                                              - 2.0*s1 + 2.0)**2
-                                                             + A*a2*s2*(a1*s1 - 2.0*s1
-                                                                        + 2.0)**2*(a2*s2
-                                                                                   - 2.0*s2 + 2.0)
-                                                             + 2.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                             - 8.0*A*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                             - 16.0*A*s1
-                                                             - 2.0*A*s2*(a1*s1
-                                                                         - 2.0*s1
-                                                                         + 2.0)**2*(a2*s2
-                                                                                    - 2.0*s2
-                                                                                    + 2.0)
-                                                             - 4.0*A*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                             + 16.0*A - 2.0*a1*a2**2*s1*s2**2
-                                                             + 2.0*a1*a2*s1*s2*(a2*s2
-                                                                                - 2.0*s2 + 2.0)
-                                                             + 4.0*a1*a2*s1*s2
-                                                             - 4.0*a1*s1*s2*(a2*s2 - 2.0*s2 + 2.0)
-                                                             - 8.0*a1*s1*s2
-                                                             + 8.0*a1*s1
-                                                             + 8.0*a2*s2))/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                            - 4.0*A*a1**2*a2*s1**2*s2
-                                                                            - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                            - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                            + 16.0*A*a1*s1
-                                                                            - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                            + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                            + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                            - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                                            + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                            + 8.0*a2*a3*s2*s3 - 32.0);                                                                                               
-
-
-  // console.log(`Params: a: ${a} n: ${n} esw1: ${esw1} esw2: ${esw2} esw3: ${esw3} 
-  // elw1: ${elw1} elw2: ${elw2} elw3: ${elw3}`)
-  var temp = -2*elw1*elw2*elw3*l1 - elw1*elw2*elw3*l2 - 2*elw1*elw2*elw3*surf
-  + 2*elw1*elw2*l1 - elw1*elw2*l3 + 2*elw1*elw2*surf + 2*elw1*elw3*l1
-  + elw1*elw3*l2 + 2*elw1*elw3*surf + 2*elw1*l2 + 2*elw1*l3
-  + 3*elw2*elw3*l1 + 2*elw2*elw3*l2 + 2*elw2*elw3*surf - 2*elw2*l1
-  + 2*elw2*l3 - 2*elw3*l1 - 2*elw3*l2
-  - 4*l1 - 4*l2 - 4*l3 - 8*surf;
-
-
-  // console.log("Numerator: "+temp);
-
-  temp /= elw1*elw2*elw3
-  - 2*elw1*elw2
-  - 2*elw1*elw3 + 4*elw1
-  - 2*elw2*elw3 + 4*elw2 + 4*elw3 - 8;
-
-  return Math.pow(temp, 1 / 4).toFixed(decimals);
-
-}
-
-
-
-export function getMaxSurfaceTemp() {
-
-  return getSurfaceTemp(0, maxInsolation, 1, 1, 1);
-
-}
-
-
-
-export function getMinSurfaceTemp() {
-
-  return getSurfaceTemp(maxAlbedo, minInsolation, 0.001, 0.001, 0.001)
-
-}
-
-
-
-function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
+function getShortSurf(A, n, s1, s2, s3, a1, a2, a3) {
   //where n is n times solar radiation
   
     const s0 = n * 1361 / 4;
@@ -211,6 +46,14 @@ function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
                                      + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
                                                                           - 2.0*s2 + 2.0)**2
                                      + 8.0*a2*a3*s2*s3 - 32.0);
+  return surf
+}
+
+function getShortL1(A, n, s1, s2, s3, a1, a2, a3) {
+  //where n is n times solar radiation
+  
+    const s0 = n * 1361 / 4;
+    const Tirr = s0/sbc; //Tirr^4
     const l1 = Tirr*4.0*s1*(a3*s3
       - 2.0*s3 + 2.0)*(-A*a1*a2*s1*s2*(a1 - 1.0)
                        + 2.0*A*a1*s1*s2*(a1 - 1.0)
@@ -235,26 +78,42 @@ function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
                                                    + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
                                                                                         - 2.0*s2 + 2.0)**2
                                                    + 8.0*a2*a3*s2*s3 - 32.0);
-      const l2 = Tirr*4.0*s2*(a3*s3
-        - 2.0*s3 + 2.0)*(A*a1**2*s1**2*s2*(a2 - 1.0)
-                         - A*a1**2*s1**2*(a2 - 1.0)
-                         + A*a1*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 2.0*A*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 4.0*A*s1*(a2 - 1.0) - A*s2*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)**2
-                         + 4.0*A*(a2 - 1.0) - 2.0*a1*s1*s2*(a2 - 1.0)
-                         + 2.0*a1*s1*(a2 - 1.0) + 4.0*a2 - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                 - 4.0*A*a1**2*a2*s1**2*s2
-                                                                 - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                 + 16.0*A*a1*s1
-                                                                 - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                                      - 2.0*s2
-                                                                                                      + 2.0)**2
-                                                                 - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-                                                                 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 + 8.0*a2*a3*s2*s3 - 32.0);
+  return l1
+}
+
+function getShortL2(A, n, s1, s2, s3, a1, a2, a3) {
+  //where n is n times solar radiation
+  
+    const s0 = n * 1361 / 4;
+    const Tirr = s0/sbc; //Tirr^4
+    const l2 = Tirr*4.0*s2*(a3*s3
+      - 2.0*s3 + 2.0)*(A*a1**2*s1**2*s2*(a2 - 1.0)
+                       - A*a1**2*s1**2*(a2 - 1.0)
+                       + A*a1*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
+                       - 2.0*A*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
+                       - 4.0*A*s1*(a2 - 1.0) - A*s2*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)**2
+                       + 4.0*A*(a2 - 1.0) - 2.0*a1*s1*s2*(a2 - 1.0)
+                       + 2.0*a1*s1*(a2 - 1.0) + 4.0*a2 - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
+                                                               - 4.0*A*a1**2*a2*s1**2*s2
+                                                               - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
+                                                               - 4.0*A*a1*a2*a3*s1*s2*s3
+                                                               + 16.0*A*a1*s1
+                                                               - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
+                                                               + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
+                                                               + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
+                                                                                                    - 2.0*s2
+                                                                                                    + 2.0)**2
+                                                               - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
+                                                               + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
+                                                               + 8.0*a2*a3*s2*s3 - 32.0);
+  return l2
+}
+
+function getShortL3(A, n, s1, s2, s3, a1, a2, a3) {
+  //where n is n times solar radiation
+  
+    const s0 = n * 1361 / 4;
+    const Tirr = s0/sbc; //Tirr^4
     const l3 = Tirr*s3*((-a3 + 1.0)*(A*a1**2*a2**2*a3*s1**2*s2**2*s3
       - 4.0*A*a1**2*a2*s1**2*s2
       - A*a1**2*a3*s1**2*s3*(a2*s2
@@ -309,8 +168,62 @@ function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
                                                                               + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
                                                                               - 2.0*a1*a2**2*a3*s1*s2**2*s3
                                                                               + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              + 8.0*a2*a3*s2*s3 - 32.0);                                                                                               
-  
+                                                                              + 8.0*a2*a3*s2*s3 - 32.0);
+  return l3
+}
+
+export function getSurfaceTemp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
+
+  //The constant terms below are shortwave absorption terms.
+  const surf = getShortSurf(A, n, s1, s2, s3, a1, a2, a3)
+  const l1 = getShortL1(A, n, s1, s2, s3, a1, a2, a3)
+  const l2 = getShortL2(A, n, s1, s2, s3, a1, a2, a3)
+  const l3 = getShortL3(A, n, s1, s2, s3, a1, a2, a3)
+
+  // console.log(`Params: a: ${a} n: ${n} esw1: ${esw1} esw2: ${esw2} esw3: ${esw3} 
+  // elw1: ${elw1} elw2: ${elw2} elw3: ${elw3}`)
+  var temp = -2*elw1*elw2*elw3*l1 - elw1*elw2*elw3*l2 - 2*elw1*elw2*elw3*surf
+  + 2*elw1*elw2*l1 - elw1*elw2*l3 + 2*elw1*elw2*surf + 2*elw1*elw3*l1
+  + elw1*elw3*l2 + 2*elw1*elw3*surf + 2*elw1*l2 + 2*elw1*l3
+  + 3*elw2*elw3*l1 + 2*elw2*elw3*l2 + 2*elw2*elw3*surf - 2*elw2*l1
+  + 2*elw2*l3 - 2*elw3*l1 - 2*elw3*l2
+  - 4*l1 - 4*l2 - 4*l3 - 8*surf;
+
+
+  // console.log("Numerator: "+temp);
+
+  temp /= elw1*elw2*elw3
+  - 2*elw1*elw2
+  - 2*elw1*elw3 + 4*elw1
+  - 2*elw2*elw3 + 4*elw2 + 4*elw3 - 8;
+
+  return Math.pow(temp, 1 / 4).toFixed(decimals);
+
+}
+
+
+
+/*export function getMaxSurfaceTemp() {
+
+  return getSurfaceTemp(0, maxInsolation, 1, 1, 1);
+
+}
+export function getMinSurfaceTemp() {
+
+  return getSurfaceTemp(maxAlbedo, minInsolation, 0.001, 0.001, 0.001)
+
+}
+#Max and mins are hard to determine due to the shortwave opacity and 
+single scattering albedo factors.
+*/
+
+
+function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
+  //The constant terms below are shortwave absorption terms.
+  const surf = getShortSurf(A, n, s1, s2, s3, a1, a2, a3)
+  const l1 = getShortL1(A, n, s1, s2, s3, a1, a2, a3)
+  const l2 = getShortL2(A, n, s1, s2, s3, a1, a2, a3)
+  const l3 = getShortL3(A, n, s1, s2, s3, a1, a2, a3)
   
     // console.log(`Params: a: ${a} n: ${n} esw1: ${esw1} esw2: ${esw2} esw3: ${esw3} 
     // elw1: ${elw1} elw2: ${elw2} elw3: ${elw3}`)
@@ -342,148 +255,26 @@ function getLayer1Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
 
 
 
-function getMaxLayer1Temp() {
+/*function getMaxLayer1Temp() {
 
   return getLayer1Temp(0, maxInsolation, 1, 1, 1);
 
 }
-
-
-
 function getMinLayer1Temp() {
 
   return getLayer1Temp(maxAlbedo, minInsolation, 0.001, 0.001, 0.001);
 
-}
+}*/
 
 
 
 function getLayer2Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
-  //where n is n times solar radiation
-  
-    const s0 = n * 1361 / 4;
-    const Tirr = s0/sbc; //Tirr^4
-    const surf = Tirr*4.0*(a3*s3 - 2.0*s3
-      + 2.0)*(4.0*A
-              + 2.0*a1*s1*(A - 1.0)
-                             + a2*s2*(A - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                             - 4.0*s1*(A - 1.0) - 2.0*s2*(A - 1.0)
-                             *(a1*s1 - 2.0*s1 + 2.0) 
-                             - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                     - 4.0*A*a1**2*a2*s1**2*s2
-                                     - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                            - 2.0*s2 + 2.0)**2
-                                     - 4.0*A*a1*a2*a3*s1*s2*s3 + 16.0*A*a1*s1
-                                     - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 +
-                                                            2.0)**2
-                                     + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                     + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                     - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                     + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                     + 8.0*a2*a3*s2*s3 - 32.0);
-    const l1 = Tirr*4.0*s1*(a3*s3
-      - 2.0*s3 + 2.0)*(-A*a1*a2*s1*s2*(a1 - 1.0)
-                       + 2.0*A*a1*s1*s2*(a1 - 1.0)
-                       + A*a2*s2*(a1 - 1.0)*(a1*s1
-                                             - 2.0*s1 + 2.0)
-                       - 4.0*A*s1*(a1 - 1.0) - 2.0*A*s2*(a1
-                                                         - 1.0)*(a1*s1
-                                                                 - 2.0*s1 + 2.0)
-                       + 4.0*A*(a1 - 1.0) + 4.0*a1 + 2.0*a2*s2*(a1 - 1.0)
-                       - 4.0*s2*(a1 - 1.0) - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                   - 4.0*A*a1**2*a2*s1**2*s2
-                                                   - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                                   - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                   + 16.0*A*a1*s1
-                                                   - A*a2**2*a3*s2**2*s3*(a1*s1
-                                                                          - 2.0*s1 + 2.0)**2
-                                                   + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                   + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                        - 2.0*s2 + 2.0)**2
-                                                   - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                   + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                                        - 2.0*s2 + 2.0)**2
-                                                   + 8.0*a2*a3*s2*s3 - 32.0);
-      const l2 = Tirr*4.0*s2*(a3*s3
-        - 2.0*s3 + 2.0)*(A*a1**2*s1**2*s2*(a2 - 1.0)
-                         - A*a1**2*s1**2*(a2 - 1.0)
-                         + A*a1*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 2.0*A*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 4.0*A*s1*(a2 - 1.0) - A*s2*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)**2
-                         + 4.0*A*(a2 - 1.0) - 2.0*a1*s1*s2*(a2 - 1.0)
-                         + 2.0*a1*s1*(a2 - 1.0) + 4.0*a2 - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                 - 4.0*A*a1**2*a2*s1**2*s2
-                                                                 - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                 + 16.0*A*a1*s1
-                                                                 - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                                      - 2.0*s2
-                                                                                                      + 2.0)**2
-                                                                 - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-                                                                 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 + 8.0*a2*a3*s2*s3 - 32.0);
-    const l3 = Tirr*s3*((-a3 + 1.0)*(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-      - 4.0*A*a1**2*a2*s1**2*s2
-      - A*a1**2*a3*s1**2*s3*(a2*s2
-                             - 2.0*s2 + 2.0)**2
-      - 4.0*A*a1*a2*a3*s1*s2*s3
-      + 16.0*A*a1*s1 - A*a2**2*a3*s2**2*s3*(a1*s1
-                                            - 2.0*s1 + 2.0)**2
-      + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-      + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-      - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-      + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-      + 8.0*a2*a3*s2*s3 - 32.0) + (a3 - 1.0)*(a3*s3
-                                              - 2.0*s3 + 2.0)*(A*a1**2*a2**2*s1**2*s2**2
-                                                               - A*a1**2*a2*s1**2*s2*(a2*s2
-                                                                                      - 2.0*s2 + 2.0)
-                                                               - 2.0*A*a1**2*a2*s1**2*s2
-                                                               + 2.0*A*a1**2*s1**2*s2*(a2*s2
-                                                                                       - 2.0*s2 + 2.0)
-                                                               + 4.0*A*a1**2*s1**2*s2
-                                                               - 4.0*A*a1**2*s1**2
-                                                               - 4.0*A*a1*a2*s1*s2
-                                                               + 4.0*A*a1*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                               + 8.0*A*a1*s1
-                                                               - A*a2**2*s2**2*(a1*s1
-                                                                                - 2.0*s1 + 2.0)**2
-                                                               + A*a2*s2*(a1*s1 - 2.0*s1
-                                                                          + 2.0)**2*(a2*s2
-                                                                                     - 2.0*s2 + 2.0)
-                                                               + 2.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               - 8.0*A*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                               - 16.0*A*s1
-                                                               - 2.0*A*s2*(a1*s1
-                                                                           - 2.0*s1
-                                                                           + 2.0)**2*(a2*s2
-                                                                                      - 2.0*s2
-                                                                                      + 2.0)
-                                                               - 4.0*A*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               + 16.0*A - 2.0*a1*a2**2*s1*s2**2
-                                                               + 2.0*a1*a2*s1*s2*(a2*s2
-                                                                                  - 2.0*s2 + 2.0)
-                                                               + 4.0*a1*a2*s1*s2
-                                                               - 4.0*a1*s1*s2*(a2*s2 - 2.0*s2 + 2.0)
-                                                               - 8.0*a1*s1*s2
-                                                               + 8.0*a1*s1
-                                                               + 8.0*a2*s2))/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                              - 4.0*A*a1**2*a2*s1**2*s2
-                                                                              - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                              + 16.0*A*a1*s1
-                                                                              - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                              + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                              + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                                              + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              + 8.0*a2*a3*s2*s3 - 32.0);                                                                                               
-  
-  
+  //The constant terms below are shortwave absorption terms.
+  const surf = getShortSurf(A, n, s1, s2, s3, a1, a2, a3)
+  const l1 = getShortL1(A, n, s1, s2, s3, a1, a2, a3)
+  const l2 = getShortL2(A, n, s1, s2, s3, a1, a2, a3)
+  const l3 = getShortL3(A, n, s1, s2, s3, a1, a2, a3)
+
 	// console.log(`Params: a: ${a} n: ${n} esw1: ${esw1} esw2: ${esw2} esw3: ${esw3} 
 	  // elw1: ${elw1} elw2: ${elw2} elw3: ${elw3}`)
 
@@ -504,147 +295,23 @@ function getLayer2Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
 
 
 
-function getMaxLayer2Temp() {
+/*function getMaxLayer2Temp() {
 
   return getLayer2Temp(0, maxInsolation, 1, 1, 1);
-
 }
-
-
-
 function getMinLayer2Temp() {
 
   return getLayer2Temp(maxAlbedo, minInsolation, 0.001, 0.001, 0.001);
-
-}
+}*/
 
 
 
 function getLayer3Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
-  //where n is n times solar radiation
-  
-    const s0 = n * 1361 / 4;
-    const Tirr = s0/sbc; //Tirr^4
-    const surf = Tirr*4.0*(a3*s3 - 2.0*s3
-      + 2.0)*(4.0*A
-              + 2.0*a1*s1*(A - 1.0)
-                             + a2*s2*(A - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                             - 4.0*s1*(A - 1.0) - 2.0*s2*(A - 1.0)
-                             *(a1*s1 - 2.0*s1 + 2.0) 
-                             - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                     - 4.0*A*a1**2*a2*s1**2*s2
-                                     - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                            - 2.0*s2 + 2.0)**2
-                                     - 4.0*A*a1*a2*a3*s1*s2*s3 + 16.0*A*a1*s1
-                                     - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 +
-                                                            2.0)**2
-                                     + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                     + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                     - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                     + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                     + 8.0*a2*a3*s2*s3 - 32.0);
-    const l1 = Tirr*4.0*s1*(a3*s3
-      - 2.0*s3 + 2.0)*(-A*a1*a2*s1*s2*(a1 - 1.0)
-                       + 2.0*A*a1*s1*s2*(a1 - 1.0)
-                       + A*a2*s2*(a1 - 1.0)*(a1*s1
-                                             - 2.0*s1 + 2.0)
-                       - 4.0*A*s1*(a1 - 1.0) - 2.0*A*s2*(a1
-                                                         - 1.0)*(a1*s1
-                                                                 - 2.0*s1 + 2.0)
-                       + 4.0*A*(a1 - 1.0) + 4.0*a1 + 2.0*a2*s2*(a1 - 1.0)
-                       - 4.0*s2*(a1 - 1.0) - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                   - 4.0*A*a1**2*a2*s1**2*s2
-                                                   - A*a1**2*a3*s1**2*s3*(a2*s2
-                                                                          - 2.0*s2 + 2.0)**2
-                                                   - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                   + 16.0*A*a1*s1
-                                                   - A*a2**2*a3*s2**2*s3*(a1*s1
-                                                                          - 2.0*s1 + 2.0)**2
-                                                   + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                   + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                        - 2.0*s2 + 2.0)**2
-                                                   - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                   + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2
-                                                                                        - 2.0*s2 + 2.0)**2
-                                                   + 8.0*a2*a3*s2*s3 - 32.0);
-      const l2 = Tirr*4.0*s2*(a3*s3
-        - 2.0*s3 + 2.0)*(A*a1**2*s1**2*s2*(a2 - 1.0)
-                         - A*a1**2*s1**2*(a2 - 1.0)
-                         + A*a1*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 2.0*A*s1*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)
-                         - 4.0*A*s1*(a2 - 1.0) - A*s2*(a2 - 1.0)*(a1*s1 - 2.0*s1 + 2.0)**2
-                         + 4.0*A*(a2 - 1.0) - 2.0*a1*s1*s2*(a2 - 1.0)
-                         + 2.0*a1*s1*(a2 - 1.0) + 4.0*a2 - 4.0)/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                 - 4.0*A*a1**2*a2*s1**2*s2
-                                                                 - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                 + 16.0*A*a1*s1
-                                                                 - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                 + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2
-                                                                                                      - 2.0*s2
-                                                                                                      + 2.0)**2
-                                                                 - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-                                                                 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                 + 8.0*a2*a3*s2*s3 - 32.0);
-    const l3 = Tirr*s3*((-a3 + 1.0)*(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-      - 4.0*A*a1**2*a2*s1**2*s2
-      - A*a1**2*a3*s1**2*s3*(a2*s2
-                             - 2.0*s2 + 2.0)**2
-      - 4.0*A*a1*a2*a3*s1*s2*s3
-      + 16.0*A*a1*s1 - A*a2**2*a3*s2**2*s3*(a1*s1
-                                            - 2.0*s1 + 2.0)**2
-      + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-      + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-      - 2.0*a1*a2**2*a3*s1*s2**2*s3 + 8.0*a1*a2*s1*s2
-      + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-      + 8.0*a2*a3*s2*s3 - 32.0) + (a3 - 1.0)*(a3*s3
-                                              - 2.0*s3 + 2.0)*(A*a1**2*a2**2*s1**2*s2**2
-                                                               - A*a1**2*a2*s1**2*s2*(a2*s2
-                                                                                      - 2.0*s2 + 2.0)
-                                                               - 2.0*A*a1**2*a2*s1**2*s2
-                                                               + 2.0*A*a1**2*s1**2*s2*(a2*s2
-                                                                                       - 2.0*s2 + 2.0)
-                                                               + 4.0*A*a1**2*s1**2*s2
-                                                               - 4.0*A*a1**2*s1**2
-                                                               - 4.0*A*a1*a2*s1*s2
-                                                               + 4.0*A*a1*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                               + 8.0*A*a1*s1
-                                                               - A*a2**2*s2**2*(a1*s1
-                                                                                - 2.0*s1 + 2.0)**2
-                                                               + A*a2*s2*(a1*s1 - 2.0*s1
-                                                                          + 2.0)**2*(a2*s2
-                                                                                     - 2.0*s2 + 2.0)
-                                                               + 2.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               - 8.0*A*s1*(a1*s1 - 2.0*s1 + 2.0)
-                                                               - 16.0*A*s1
-                                                               - 2.0*A*s2*(a1*s1
-                                                                           - 2.0*s1
-                                                                           + 2.0)**2*(a2*s2
-                                                                                      - 2.0*s2
-                                                                                      + 2.0)
-                                                               - 4.0*A*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                               + 16.0*A - 2.0*a1*a2**2*s1*s2**2
-                                                               + 2.0*a1*a2*s1*s2*(a2*s2
-                                                                                  - 2.0*s2 + 2.0)
-                                                               + 4.0*a1*a2*s1*s2
-                                                               - 4.0*a1*s1*s2*(a2*s2 - 2.0*s2 + 2.0)
-                                                               - 8.0*a1*s1*s2
-                                                               + 8.0*a1*s1
-                                                               + 8.0*a2*s2))/(A*a1**2*a2**2*a3*s1**2*s2**2*s3
-                                                                              - 4.0*A*a1**2*a2*s1**2*s2
-                                                                              - A*a1**2*a3*s1**2*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              - 4.0*A*a1*a2*a3*s1*s2*s3
-                                                                              + 16.0*A*a1*s1
-                                                                              - A*a2**2*a3*s2**2*s3*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                              + 4.0*A*a2*s2*(a1*s1 - 2.0*s1 + 2.0)**2
-                                                                              + A*a3*s3*(a1*s1 - 2.0*s1 + 2.0)**2*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              - 2.0*a1*a2**2*a3*s1*s2**2*s3
-                                                                              + 8.0*a1*a2*s1*s2 + 2.0*a1*a3*s1*s3*(a2*s2 - 2.0*s2 + 2.0)**2
-                                                                              + 8.0*a2*a3*s2*s3 - 32.0);                                                                                               
-  
+  //The constant terms below are shortwave absorption terms.
+  const surf = getShortSurf(A, n, s1, s2, s3, a1, a2, a3)
+  const l1 = getShortL1(A, n, s1, s2, s3, a1, a2, a3)
+  const l2 = getShortL2(A, n, s1, s2, s3, a1, a2, a3)
+  const l3 = getShortL3(A, n, s1, s2, s3, a1, a2, a3)  
   
 	// console.log(`Params: a: ${a} n: ${n} esw1: ${esw1} esw2: ${esw2} esw3: ${esw3} 
 	  // elw1: ${elw1} elw2: ${elw2} elw3: ${elw3}`)
@@ -659,21 +326,16 @@ function getLayer3Temp(A, n, elw1, elw2, elw3, s1, s2, s3, a1, a2, a3) {
 
 }
 
-
-
-function getMaxLayer3Temp() {
+/*function getMaxLayer3Temp() {
 
   return getLayer3Temp(0, maxInsolation, 1, 1, 1);
 
 }
-
-
-
 function getMinLayer3Temp() {
 
   return getLayer3Temp(maxAlbedo, minInsolation, 0.001, 0.001, 0.001);
 
-}
+}*/
 
 
 
@@ -751,7 +413,7 @@ export function getLayerTemp(layerNumber, a, n, elwi, si, ai) {
 
 
 
-export function getMaxLayerTemp(layerNumber) {
+/*export function getMaxLayerTemp(layerNumber) {
 
   switch (layerNumber) {
 
@@ -774,9 +436,6 @@ export function getMaxLayerTemp(layerNumber) {
   }
 
 }
-
-
-
 export function getMinLayerTemp(layerNumber) {
 
   switch (layerNumber) {
@@ -799,4 +458,4 @@ export function getMinLayerTemp(layerNumber) {
 
   }
 
-}
+}*/

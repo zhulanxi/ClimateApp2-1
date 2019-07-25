@@ -44,12 +44,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // Default loaded example
+    // Default loaded examples
     var layer1 = {
       layerNumber: 1,
-      alpha: 0.7,
-      opa: 0.3,
-      sca: 0.3
+      alpha: 0.7,//longwave opacity
+      opa: 0.3,//shortwave opacity
+      sca: 0.3//single scattering albedo
     };
 
     var layerPed = {
@@ -57,7 +57,10 @@ class App extends Component {
       alpha: 0.7
     }
 
-    //Different props for different versions to avoid sharing
+    /*
+    Independ props for two versions so that changes made in
+    one version do not carry on to the other.
+    */
     this.state = {
       stellarRadiation: 1,
       stellarRadiationPed: 1,
@@ -66,14 +69,14 @@ class App extends Component {
       nameCount: 3,
       nameCountPed: 1,
       layers: [layer1],
-      layersPed: [layerPed],
-      checked: true
+      layerPed: [layerPed],
+      checked: true //switch state "true" = beginner (pedagogical) version
     };
 
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
     this.addNewDefaultLayerPed = this.addNewDefaultLayerPed.bind(this);
     this.addNewLayer = this.addNewLayer.bind(this);
-    this.addNewLayerPed = this.addNewLayerPed.bind(this);
+    this.addNewLayerPed = this.addNewLayerPed.bind(this);//maybe unecessary
     this.removeLayer = this.removeLayer.bind(this);
     this.removeLayerPed = this.removeLayerPed.bind(this);
     this.changeAlbedo = this.changeAlbedo.bind(this);
@@ -86,6 +89,7 @@ class App extends Component {
     this.changeSca = this.changeSca.bind(this);
     this.changeVersion = this.changeVersion.bind(this);
   }
+
   changeVersion(checked) {
     this.setState({ checked: checked === true ? true : false });
   }
@@ -108,18 +112,17 @@ class App extends Component {
 
   }
 
-  changeAlphaPed(layerNumber, alphaValue) {
+  changeAlphaPed(layerNumber,alphaValue) {
     
-    let newLayers = [...this.state.layersPed];
-    let layer = { ...newLayers[layerNumber - 1] };
+    let newLayer = [...this.state.layerPed];
+    let layer = {...newLayer[layerNumber - 1]};
     layer.alpha = alphaValue;
-    newLayers[layerNumber - 1] = layer;
-    this.setState({ layersPed: newLayers });
+    newLayer[layerNumber - 1] = layer;
+    this.setState({ layerPed: newLayer });
 
   }
 
 
-//added codes
   changeOpa(layerNumber, opaValue) {
     let newLayers = [...this.state.layers];
     let layer = { ...newLayers[layerNumber - 1] };
@@ -193,7 +196,7 @@ class App extends Component {
 
   addNewDefaultLayerPed() {
     var newLayer = {
-      layerNumber: this.state.layersPed.length + 1,
+      layerNumber: 1,
       alpha: 0.5
     }
     this.addNewLayerPed(newLayer);
@@ -210,12 +213,12 @@ class App extends Component {
   }
 
   addNewLayerPed(newLayer) {
-    if (Object.keys(this.state.layersPed).length >= 1) {
+    if (Object.keys(this.state.layerPed).length >= 1) {
       return false;
     }
 
     this.setState((prevState) => ({
-      layersPed: [...prevState.layersPed, newLayer]
+      layerPed: [...prevState.layerPed, newLayer]
     }))
   }
 
@@ -239,34 +242,44 @@ class App extends Component {
 
     
     this.setState(prevState => {
-      var newLayers = prevState.layersPed.filter(layer => !Object.is(layer, delLayer));
-      for (let layer of newLayers) {
+      var newLayer = prevState.layerPed.filter(layer => !Object.is(layer, delLayer));
+      for (let layer of newLayer) {
         if (layer.layerNumber > delLayer.layerNumber) {
           layer.layerNumber--;
         }
       }
-      return { layersPed: newLayers };
+      return { layerPed: newLayer };
     })
   }
 
-//conditional rendering for switch
+//added conditional rendering for switch
   render() { 
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Climate App 3.0</h1>
-          <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/>  
+          {this.state.checked === false ?
+          <span className="App-intro">
+          Advanced&nbsp;
+          <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
+          <font color="#797878" font-weight="bold" >&nbsp;Beginner&nbsp;&nbsp;</font>
+          </span>
+          :
+          <span className="App-intro">
+          <font color="#797878" font-weight="bold">Advanced&nbsp;</font>
+          <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
+          &nbsp;Beginner&nbsp;&nbsp;
+          </span>} 
         </header>
       {this.state.checked === false ?            
         
         <main role="main">
           <div className="main-frame">
-
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting description="The amount of radiation from the star that reaches the planet,<br/> assumed to be completely within the shortwave range."settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiation)+2)*100/4} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
+                  <SliderSetting description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiation)+2)*100/4} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
                 </SingleSettingController>
                 
 
@@ -276,7 +289,7 @@ class App extends Component {
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting description="Planetary surface reflectivity to shortwave radiation,<br/> different from effective albedo." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  <SliderSetting description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                 </SingleSettingController>
               </div>
               <div className="simulation-container" >
@@ -290,14 +303,13 @@ class App extends Component {
         
         <main role="main">
           <div className="main-frame">
-
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSettingPed description="The amount of radiation from the star that reaches the planet." settingName="Solar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"S₀"}/>
+                  <SliderSettingPed description="The amount of radiation from the star that reaches the planet." settingName="Solar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"Solar Flux at Earth"}/>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <LayerContainerPed settingName="Atmosphere" layers={this.state.layersPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
+                  <LayerContainerPed settingName="Atmosphere" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
                     <AtmLayerPed removeLayer={this.removeLayerPed} />
                   </LayerContainerPed>
                 </SingleSettingController>
@@ -309,13 +321,13 @@ class App extends Component {
               </div>
               <div className="simulation-container" >
                 Simulation
-              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layers={this.state.layersPed} />
+              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} />
               </div>
             </div>
           </div>
         </main>}
         <footer className="App-footer">
-          <p>A. Courchesne| L. X. Zhu | N. Cowan | McGill University 2019 | <a href="https://climateapp.ca/public/Instructions.pdf">How does this work ?</a></p>
+          <p>L. X. Zhu | A. Courchesne | J. C. Schwartz | N. Cowan | McGill University 2019 | <a href="https://climateapp.ca/public/Instructions.pdf">How does this work ?</a></p>
         </footer>
       </div>
     );

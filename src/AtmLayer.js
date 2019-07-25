@@ -8,14 +8,15 @@ import Slider from 'rc-slider';
 
 
 class AtmLayer extends Component {
-    //This components should be enclosed in a SmallContainer
+    //The box containing sliders for individual atmospheric layer.
+    //This component should be enclosed in a SmallContainer
     constructor(props) {
         super(props);
 
         this.handleRemoveLayer = this.handleRemoveLayer.bind(this);
         this.handleChangeAlpha = this.handleChangeAlpha.bind(this);
-        this.handleChangeOpa = this.handleChangeOpa.bind(this);//added
-        this.handleChangeSca = this.handleChangeSca.bind(this);//added
+        this.handleChangeOpa = this.handleChangeOpa.bind(this);
+        this.handleChangeSca = this.handleChangeSca.bind(this);
     }
 
     handleChangeAlpha(newValue) {
@@ -48,9 +49,9 @@ class AtmLayer extends Component {
                     </span>
                 </div>
                 <div className="core-line">
-                    <p data-tip="The total amount of incoming
-                    shortwave radiation that is<br/> absorbed or scattered by the atmospheric layer." 
-                    data-place="left"
+                    <p data-tip="Fraction of shortwave radiation that is being absorbed or reflected
+                     by the atmospheric layers.<br/> A value of 1 means that all shortwave radiation interacts with this atmospheric layer." 
+                    data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
@@ -70,7 +71,7 @@ class AtmLayer extends Component {
                             borderWidth: 3,
                             height: 20,
                             width: 20,
-                            marginLeft: -14,
+                            marginLeft: -10,
                             marginTop: -7,
                         }}
                         railStyle={{
@@ -80,10 +81,8 @@ class AtmLayer extends Component {
                         defaultValue={this.props.layer.opa}
                         value={this.props.layer.opa}
                         onChange={(value) => this.handleChangeOpa(value)} /></div>
-                    <p data-tip="The proportionality between the amount of scattered radiation<br/>
-                     and the shortwave opacity
-                     of the atmospheric layer." 
-                    data-place="left"
+                    <p data-tip="The fraction of total interacting shortwave radiation that is back-scattered.<br/> A value of 1 means that all interacting shortwave radiation are back-scattered." 
+                    data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
@@ -103,7 +102,7 @@ class AtmLayer extends Component {
                             borderWidth: 3,
                             height: 20,
                             width: 20,
-                            marginLeft: -14,
+                            marginLeft: -10,
                             marginTop: -7,
                         }}
                         railStyle={{
@@ -113,14 +112,14 @@ class AtmLayer extends Component {
                         defaultValue={this.props.layer.sca}
                         value={this.props.layer.sca}
                         onChange={(value) => this.handleChangeSca(value)} /></div>
-                    <p data-tip="The atmospheric layer's effectiveness in emitting
-                     and <br/> absorbing energy in form of thermal radiation (longwave)." 
-                    data-place="left"
+                    <p data-tip="The fraction of incident thermal radiation absorbed by the atmosphere, also called longwave emissivity.<br/>
+                    The fraction of scattered thermal radiation is fixed to zero(0)." 
+                    data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Longwave Emissivity: {this.props.layer.alpha.toFixed(2)}</p>
+                        Longwave Opacity: {this.props.layer.alpha.toFixed(2)}</p>
                     
                     <div className="push-above"><Slider
                         min={0}
@@ -135,7 +134,7 @@ class AtmLayer extends Component {
                             borderWidth: 3,
                             height: 20,
                             width: 20,
-                            marginLeft: -14,
+                            marginLeft: -10,
                             marginTop: -7,
                         }}
                         railStyle={{

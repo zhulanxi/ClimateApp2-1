@@ -12,38 +12,12 @@ class VersionSwitch extends Component {
                 offColor={"#F5A623"}
                 onHandleColor={"#000"}
                 offHandleColor={"#000"}
-                handleDiameter={21}
+                handleDiameter={17}
+                height={23}
+                width={45}
                 activeBoxShadow={'0 0 2px 2px #3bf'}
-                uncheckedIcon={
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "100%",
-                            fontSize: 15,
-                            color: "white",
-                            paddingRight: 2
-                        }}
-                    >
-                        Pro
-                    </div>
-                }
-                checkedIcon={
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "100%",
-                            fontSize: 15,
-                            color: "white",
-                            paddingLeft: 2
-                        }}
-                    >
-                        Ped
-                    </div>
-                }
+                uncheckedIcon={false}
+                checkedIcon={false}
             className="react-switch"
             id="icon-switch"
             />

@@ -9,10 +9,8 @@ import LayerAdder from './LayerAdder';
 class LayerContainerPed extends Component {
     render() {
 
-
-        //This is the list of layer boxes
         var layerBoxes = (
-            this.props.layers.slice(0).reverse().map((_layer, index) => {
+            this.props.layer.slice(0).reverse().map((_layer, index) => {
                 // this.props.layers.map((_layer, index) => {
                     const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
                 return (
@@ -26,7 +24,7 @@ class LayerContainerPed extends Component {
         )
 
         //This is the plus box that should only appear if we have no atmospheric layer
-        var layerAdder = Object.keys(this.props.layers).length >= 1 ? '' : (
+        var layerAdder = Object.keys(this.props.layer).length >= 1 ? '' : (
             <React.Fragment>
                 <SmallContainer>
                     <LayerAdder addNewDefaultLayer={this.props.addNewDefaultLayer} />

@@ -5,9 +5,7 @@ import { getSurfaceTemp, getLayerTemp } from './CalcPed.js'
 
 const unicodeSubscriptDict = {
     0: '₀',
-    1: '₁',
-    2: '₂',
-    3: '₃'
+    1: '₁'
 }
 
 class SimulationCanvasPed extends React.Component {
@@ -34,32 +32,26 @@ class SimulationCanvasPed extends React.Component {
         const a = this.props.planetaryAlbedo;
         const s = this.props.stellarRadiation;
         const s0 = s*1361/4;
-        const e1 = typeof this.props.layers[0] === "undefined" ? 0 : this.props.layers[0].alpha;
-        const e2 = typeof this.props.layers[1] === "undefined" ? 0 : this.props.layers[1].alpha;
-        const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
-        const ei = [e1,e2,e3]
+        const e = typeof this.props.layer[0] === "undefined" ? 0 : this.props.layer[0].alpha;
 
         const shortwaveColor = "#ffd11a"
         const longwaveColor = "#ff3333"
 
-        var surfaceTemp = parseInt(getSurfaceTemp(a, s, e1, e2, e3),10)
-        const deltaTemp = getSurfaceTemp(a,s,e1,e2,e3)-getSurfaceTemp(a,s,0,0,0)
-        var layerTemps = []
+        var surfaceTemp = parseInt(getSurfaceTemp(a, s, e),10)
+        const deltaTemp = getSurfaceTemp(a,s,e) - getSurfaceTemp(a,s,0)
+        var layerTemp = 0
+        var layerTempCel = 0
 
-        for (let i = 0; i < 3; i++) {
-            if (ei[i] !== 0) {
-                layerTemps[i] = getLayerTemp(i, a, s, ei)
-            }
+        if (e !== 0){
+            layerTemp = getLayerTemp(a,s,e)
         }
+
         const surfaceTempCel = (surfaceTemp-273.15).toFixed(0)
-        var layerTempsCel = []
-
-        for (let i = 0; i < 3; i++) {
-            if (ei[i] !== 0) {
-                layerTempsCel[i] = (parseInt(getLayerTemp(i, a, s, ei),10)-273.15).toFixed(0)
-            }
+        
+        if (e !== 0){
+            layerTempCel = (parseInt(getLayerTemp(a, s, e),10)-273.15).toFixed(0)
         }
-       
+     
 
         
 
@@ -76,7 +68,7 @@ class SimulationCanvasPed extends React.Component {
         
         // Draw longwave planet emission
         //y=181 is approximately the midway of the atmosphere
-        drawArrow(ctx, 165, 355, 165, 186+getLayerWidth(ei[0]), getLayerAbsorbedEmission(sbc,surfaceTemp, s0,ei), longwaveColor )
+        drawArrow(ctx, 165, 355, 165, 186+getLayerWidth(e), getLayerAbsorbedEmission(sbc,surfaceTemp, s0,e), longwaveColor )
 
 
 
@@ -87,18 +79,14 @@ class SimulationCanvasPed extends React.Component {
         ctx.fill();
 
         // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 181, 270, 298, getAtmosphericRadiationTopWidth(sbc,layerTemps, ei, s0), longwaveColor )
-        drawArrow(ctx, 270, 181, 270, 65, getAtmosphericRadiationTopWidth(sbc,layerTemps, ei, s0), longwaveColor )
+        drawArrow(ctx, 270, 181, 270, 298, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
+        drawArrow(ctx, 270, 181, 270, 65, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
  
 
 
-        for (let i = 0; i < 2; i++) {
+         if (e !== 0) {
 
-            // if (!(typeof this.props.layers[i] === "undefined") && this.props.layers[i].alpha > 0) {
-
-            if (ei[i] !== 0) {
-
-                // maxLayer = i;
+                // if there is an atmosphere;
 
                 ctx.beginPath();
 
@@ -106,26 +94,25 @@ class SimulationCanvasPed extends React.Component {
 
                 ctx.strokeStyle = "#99ccff";
 
-                ctx.lineWidth = getLayerWidth(ei[i]);
+                ctx.lineWidth = getLayerWidth(e);
 
                 ctx.stroke()
 
             }
 
-        }
 
         
         // Draw stellar radiation arrow
-        drawArrow(ctx, 15, 65, 69, 330, getStellarWidth(), shortwaveColor)
+        drawArrow(ctx, 10, 65, 64, 330, getStellarWidth(), shortwaveColor)
 
         // Draw reflected shortwave
         if(a > 0){
-            drawArrow(ctx, 85, 355, 145, 94, getReflectedStellarWidth(a), shortwaveColor)
+            drawArrow(ctx, 90, 355, 150, 94, getReflectedStellarWidth(a), shortwaveColor)
         }
 
         // Draw longwave planet emission that is not absorbed by atmosphere
         //if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
-        drawArrow(ctx, 215, 350, 215, 50, getEscapingSurfaceEmissionWidth(sbc,surfaceTemp, s0, ei), longwaveColor)
+        drawArrow(ctx, 215, 350, 215, 50, getEscapingSurfaceEmissionWidth(sbc,surfaceTemp, s0, e), longwaveColor)
         //}
 
         
@@ -135,21 +122,21 @@ class SimulationCanvasPed extends React.Component {
         // }
 
         // Draw temperature label at each layer
-        for (let i = 0; i < 3; i++) {
-            if (ei[i] !== 0) {
+        
+            if (e !== 0) {
                 ctx.beginPath()
                 ctx.strokeStyle = "black";
                 ctx.fillStyle = "black";
                 ctx.lineWidth = 0.5;
                 let tx = 300
-                let ty = 218 - 25 * i
+                let ty = 218 - 25 * 1
                 ctx.clearRect(tx - 10, ty - 17, 110, 20)
                 // ctx.clearRect(tx - 10, ty - 17, 110, 24)
                 ctx.rect(tx - 10, ty - 17, 110, 20)
                 ctx.stroke()
-                ctx.fillText("T" + unicodeSubscriptDict[i + 1] + "= " + layerTempsCel[i] + "°C", tx, ty);
+                ctx.fillText("T" + unicodeSubscriptDict[1] + "= " + layerTempCel + "°C", tx, ty);
             }
-        }
+        
 
         // Delta Temperature label
         ctx.beginPath()
@@ -267,25 +254,23 @@ function getSurfaceEmissionWidth(sbc,temp,s0){
     return relativeWidth*getStellarWidth()
 }
 
-function getLayerAbsorbedEmission(sbc,temp, s0, ei){
-    //var emul = (1-ei[0])*(1-ei[1])*(1-ei[2])
-    return getSurfaceEmissionWidth(sbc,temp, s0)*(ei[0])
+function getLayerAbsorbedEmission(sbc,temp, s0, e){
+    
+    return getSurfaceEmissionWidth(sbc,temp, s0)*e
 }
 
-function getEscapingSurfaceEmissionWidth(sbc,temp,s0 , ei){
-    //var emul = (1-ei[0])*(1-ei[1])*(1-ei[2])
-    return getSurfaceEmissionWidth(sbc,temp,s0)*(1-ei[0])
+function getEscapingSurfaceEmissionWidth(sbc,temp,s0 , e){
+    
+    return getSurfaceEmissionWidth(sbc,temp,s0)*(1-e)
 }
 
-function getAtmosphericRadiationTopWidth(sbc,layerTemps, ei, s0){
+function getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0){
     //const maxWidth = 8
     //const minWidth = 0
 
-    var t1 = typeof layerTemps[0] === "undefined" ? 0 : layerTemps[0];
-    //var t2 = typeof layerTemps[1] === "undefined" ? 0 : layerTemps[1] / Math.pow(s0,(1/4));
-    //var t3 = typeof layerTemps[2] === "undefined" ? 0 : layerTemps[2] / Math.pow(s0,(1/4));
+    var t = typeof layerTemp === "undefined" ? 0 : layerTemp;
     
-    var relativeWidth = sbc*Math.pow(t1,4)*ei[0]/s0
+    var relativeWidth = sbc*Math.pow(t,4)*e/s0
     //const maxVal = 3.04;
     //const minVal = 0;
     //var relativeVal = (value - minVal) / (maxVal - minVal)

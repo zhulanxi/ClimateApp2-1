@@ -14,7 +14,7 @@ class SliderSettingPed extends Component {
         return (
             <div>
                 <p data-tip={this.props.description} 
-                    data-place="left"
+                    data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
