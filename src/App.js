@@ -48,8 +48,8 @@ class App extends Component {
     var layer1 = {
       layerNumber: 1,
       alpha: 0.7,//longwave opacity
-      opa: 0.3,//shortwave opacity
-      sca: 0.3//single scattering albedo
+      opa: 0.4,//shortwave opacity
+      sca: 0.5//single scattering albedo
     };
 
     var layerPed = {
@@ -188,8 +188,8 @@ class App extends Component {
     var newLayer = {
       layerNumber: this.state.layers.length + 1,
       alpha: 0.5,
-      opa: 0.3,
-      sca:0.3
+      opa: 0.5,
+      sca:0.5
     }
     this.addNewLayer(newLayer);
   }
@@ -197,7 +197,7 @@ class App extends Component {
   addNewDefaultLayerPed() {
     var newLayer = {
       layerNumber: 1,
-      alpha: 0.5
+      alpha: 0.7
     }
     this.addNewLayerPed(newLayer);
   }
