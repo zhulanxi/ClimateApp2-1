@@ -58,9 +58,9 @@ This application has a beginner version (figure \ref{fig:ped}) and a advanced ve
 
 This panel is a visual representation of the planet's climate. The yellow arrows track the shortwave radiation, and the red arrows track the longwave thermal emission. For example, on Earth the incoming sunlight is primarily visible and near infrared, while the outgoing radiation is in the thermal infrared range. By modifying the input variables, it is possible to see the arrows' size varying in real time. The diagram is called a Trenberth Diagram, which uses arrows to visualize global energy flows.
 
-The effect of the solar / stellar radiation slider on the total energy flux is not represented on the arrow.\footnote{Since the insolation is a log scale, if we try to visually represent the changes in this parameter in the width of the arrows, all the other modification (e.g. layers' opacity) would have negligible effects and there would be no visible variation.} The widths of arrows therefore represent the fraction of incident flux.
+The effect of the solar (or stellar) radiation slider on the total energy flux is not represented on the arrow.\footnote{Since the insolation is a log scale, if we try to visually represent the changes in this parameter in the width of the arrows, all the other modification (e.g. layers' opacity) would have negligible effects and there would be no visible variation.} The widths of arrows therefore represent the fraction of incident flux.
 
-Since there would be a lot of arrows between each layer (see figure \ref{fig:model}), the display of the layers is abstracted in a thick pale blue line. We can still see each layer inside, and their thickness is proportional to their infrared opacity / longwave emissivity, but the energy exchange between layers of the atmosphere is not shown. The resulting temperatures are shown at the surface and at each layer.
+Since there would be a lot of arrows between each layer (see figure \ref{fig:model}), the display of the layers is abstracted in a thick pale blue line. We can still see each layer inside, and their thickness is proportional to their infrared opacity (or longwave emissivity), but the energy exchange between layers of the atmosphere is not shown. The resulting temperatures are shown at the surface and at each layer.
 
 \begin{figure}[H]
   \centering
@@ -79,23 +79,23 @@ The effective albedo gives the ratio between the shortwave energy that emerges f
 
 This panel lets you vary the planetary properties.
 
-\subsubsection*{Solar Radiation / Stellar Radiation}
+\subsubsection*{Solar Radiation or Stellar Radiation}
 
 Also known as ``insolation'', this is the solar or stellar flux at the top of the planetary atmosphere. The solar constant is a quantity measuring the flux density of solar radiation per unit area at a distance of 1 AU (1 astronomical unit i.e. the Earth--Sun distance) from the Sun\footnote{\href{https://en.wikipedia.org/wiki/Solar_constant}{Solar Constant, Wikipedia.}}. The default value of 1 S$_0$ corresponds to approximately 341 W/m$^2$.\footnote{``S$_0$'' corresponds to 1/4 of the solar constant, since the Earth receives solar radiation with a circular cross-section instead of the whole sphere.} For example, a value of 10 on this slider would mean that the planet receives ten times the amount of stellar radiation that we receive on Earth. The slider is a logarithmic scale, which allows for values as high as 100 S$_0$ and as low as 0.01 S$_0$. 
 
 
-\subsubsection*{Planetary Reflectivity / Surface Albedo}
+\subsubsection*{Planetary Reflectivity or Surface Albedo}
 
 This value determines how reflective the planetary surface is. A value of 1 would mean that the planet reflects all the incoming radiation. A value of 0 would mean that the planet is very dark and absorbs all the incoming radiation. The default value is the Earth's albedo, approximately 30\%. While moving this slider, you can observe the planet in the simulation canvas change in shade.
 
-\subsubsection*{Atmosphere / Atmospheric Layers}
+\subsubsection*{Atmosphere or Atmospheric Layers}
 
 In this box, you will find settings for the atmosphere. In the beginner version, as shown in figure \ref{fig:ped}, the atmosphere is treated as a single layer to demonstrate the greenhouse effect. You may remove the atmosphere by clicking the $\times$ sign and add it back by clicking on a + box which only appears when your system does not have an atmosphere.
 
 For the advanced version, you may have up to three atmospheric layers, each having different properties. This feature simulates the variation in atmospheric properties within a planetary atmosphere due to different gases. For example, Earth's atmosphere has more water vapor in the lower, warmer layers compared to the higher and colder layers. In this case, lower layers would have higher longwave opacity comparing to higher layers. You can click on the + box to add a new layer, and the $\times$ on a layer to remove it. 
 
 \begin{itemize}
-    \item \textbf{Infrared Opacity / Longwave Emissivity}: For each layer in both versions, you can set the value of longwave emissivity, which is its effectiveness in absorbing and emitting energy as thermal radiation. A value of 0 would mean that the layer itself does not emit any thermal radiation; whereas a value of 1 would mean that the layer radiates energy following the Stefan-Boltzmann law (details below).
+    \item \textbf{Infrared Opacity or Longwave Emissivity}: For each layer in both versions, you can set the value of longwave emissivity, which is its effectiveness in absorbing and emitting energy as thermal radiation. A value of 0 would mean that the layer itself does not emit any thermal radiation; whereas a value of 1 would mean that the layer radiates energy following the Stefan-Boltzmann law (details below).
     
     \item \textbf{Shortwave Opacity}: As shortwave radiation encounters an atmospheric layer, the photons may be transmitted (passing through without interaction), absorbed or scattered by molecules and aerosols in the atmosphere. This slider determines the fraction of interacting (absorbed and scattered) shortwave radiation at the corresponding layer. A value of 1 means that all of the photons interact with this layer, either via absorption or scattering. 
     
