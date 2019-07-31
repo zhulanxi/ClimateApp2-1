@@ -76,7 +76,7 @@ class App extends Component {
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
     this.addNewDefaultLayerPed = this.addNewDefaultLayerPed.bind(this);
     this.addNewLayer = this.addNewLayer.bind(this);
-    this.addNewLayerPed = this.addNewLayerPed.bind(this);//maybe unecessary
+    this.addNewLayerPed = this.addNewLayerPed.bind(this);
     this.removeLayer = this.removeLayer.bind(this);
     this.removeLayerPed = this.removeLayerPed.bind(this);
     this.changeAlbedo = this.changeAlbedo.bind(this);

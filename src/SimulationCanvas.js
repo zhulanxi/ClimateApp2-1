@@ -93,7 +93,7 @@ class SimulationCanvas extends React.Component {
         // Draw reflected shortwave
         //From ground to atm is just u0 (up from surface)
         if(a > 0){
-            drawArrow(ctx, 100, 355, 115, 225, 
+            drawArrow(ctx, 100, 355, 116, 235, 
                 getStellarWidth()*getReflectedStellarWidth(s1, s2, s3, a1, a2, a3,a), shortwaveColor)
         }
 
