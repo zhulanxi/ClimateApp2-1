@@ -46,7 +46,7 @@ calculations are done, using the external files Calc.js and CalcPed.js. The two 
 ### Calc.js and CalcPed.js
 
 The functions to compute the temperature of the surface and the layers are in these
-files. Functions in Calc.js have many more variables as compared to those in CalcPed.js and are more complicated.
+files. Functions in Calc.js have many more variables as compared to those in CalcPed.js and are more complicated. The original system of equations are solved using Python simpy module (available in "calculations" folder)
 
 ### LayerContainer.js and LayerContainerPed.js
 This file is responsible for rendering the box with a variable number of layers. As

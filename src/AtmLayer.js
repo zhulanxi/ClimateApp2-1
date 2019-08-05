@@ -113,7 +113,7 @@ class AtmLayer extends Component {
                         value={this.props.layer.sca}
                         onChange={(value) => this.handleChangeSca(value)} /></div>
                     <p data-tip="The fraction of incident thermal radiation absorbed by the atmosphere, also called longwave emissivity.<br/>
-                    The fraction of scattered thermal radiation is fixed to zero(0)." 
+                    The fraction of scattered thermal radiation is fixed to 0." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
