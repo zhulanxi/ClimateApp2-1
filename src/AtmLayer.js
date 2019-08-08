@@ -81,13 +81,14 @@ class AtmLayer extends Component {
                         defaultValue={this.props.layer.opa}
                         value={this.props.layer.opa}
                         onChange={(value) => this.handleChangeOpa(value)} /></div>
-                    <p data-tip="The fraction of total interacting shortwave radiation that is back-scattered.<br/> A value of 1 means that all interacting shortwave radiation are back-scattered." 
+                    <p data-tip="The fraction of total interacting shortwave radiation that is scattered.<br/> A value of 1 means that all interacting shortwave radiation are scattered." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
+                        Single Scattering Albedo: {this.props.layer.opa === 0?
+                        0: this.props.layer.sca.toFixed(2)}</p>
                     
                     <div className="push-above"><Slider
                         min={0}
@@ -97,7 +98,15 @@ class AtmLayer extends Component {
                             backgroundColor: '#4f97c5',
                             height: 7
                         }}
-                        handleStyle={{
+                        handleStyle={this.props.layer.opa === 0?{
+                            borderColor: '#a9bac5',
+                            borderWidth: 3,
+                            height: 20,
+                            width: 20,
+                            marginLeft: -10,
+                            marginTop: -7,
+                        }:
+                        {
                             borderColor: '#4f97c5',
                             borderWidth: 3,
                             height: 20,
@@ -105,13 +114,17 @@ class AtmLayer extends Component {
                             marginLeft: -10,
                             marginTop: -7,
                         }}
-                        railStyle={{
+                        railStyle={this.props.layer.opa === 0?{
+                            backgroundColor: '#a9bac5',
+                            marginTop: 1
+                        }:
+                        {
                             backgroundColor: '#84b3d1',
                             marginTop: 1
                         }}
                         defaultValue={this.props.layer.sca}
-                        value={this.props.layer.sca}
-                        onChange={(value) => this.handleChangeSca(value)} /></div>
+                        value={this.props.layer.opa === 0? 0:this.props.layer.sca}
+                        onChange={this.props.layer.opa === 0?'':(value) => this.handleChangeSca(value)} /></div>
                     <p data-tip="The fraction of incident thermal radiation absorbed by the atmosphere, also called longwave emissivity.<br/>
                     The fraction of scattered thermal radiation is fixed to 0." 
                     data-place="top"
