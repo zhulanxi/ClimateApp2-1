@@ -39,8 +39,13 @@ class SimulationCanvas extends React.Component {
         const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
         const ei = [e1,e2,e3]
 
-        
-        
+        //whether a certain layer exists, tf stands for true or false
+        const tf1 = typeof this.props.layers[0] === "undefined" ? 0 : 1;
+        const tf2 = typeof this.props.layers[0] === "undefined" ? 0 : 1;
+        const tf3 = typeof this.props.layers[0] === "undefined" ? 0 : 1;
+        const tfi = [tf1,tf2,tf3]
+
+               
         const s1 = typeof this.props.layers[0] === "undefined" ? 0: this.props.layers[0].opa;
         const s2 = typeof this.props.layers[1] === "undefined" ? 0: this.props.layers[1].opa;
         const s3 = typeof this.props.layers[2] === "undefined" ? 0: this.props.layers[2].opa;
@@ -100,7 +105,7 @@ class SimulationCanvas extends React.Component {
         //Draw shortwave from TOA to space
         //u3
         drawArrow (ctx, 118, 200, 132, 77, 
-            getEffectiveAlbedo(layerTemps, s1, s2, s3, a1, a2, a3,a)*getStellarWidth(),shortwaveColor)
+            getEffectiveAlbedo(tfi, s1, s2, s3, a1, a2, a3,a)*getStellarWidth(),shortwaveColor)
         
 
         // Draw longwave atmospheric downward emission
@@ -188,7 +193,7 @@ class SimulationCanvas extends React.Component {
         ctx.fillText("Effective", 80, 50);
         ctx.fillText(" albedo: ", 80, 65);//just making the two words
         // to appear on different lines
-        ctx.fillText(getEffectiveAlbedo(layerTemps, s1,s2,s3,a1,a2,a3, a).toFixed(2), 140, 60);
+        ctx.fillText(getEffectiveAlbedo(tfi, s1,s2,s3,a1,a2,a3, a).toFixed(2), 140, 60);
     }
 
 
@@ -307,17 +312,15 @@ function getAtmosphericRadiationTopWidth(sbc, layerTemps,s0, ei){
 }
 
 //which is just u3 (same as the factor)
-function getEffectiveAlbedo(layerTemps,s1,s2,s3,a1,a2,a3,A){
-    var t1 = typeof layerTemps[0] === "undefined" ? 0 : 1 ;
-    var t2 = typeof layerTemps[1] === "undefined" ? 0 : 1 ;
-    var t3 = typeof layerTemps[2] === "undefined" ? 0 : 1 ;
-    if (t1 === 0) {
+function getEffectiveAlbedo(tfi,s1,s2,s3,a1,a2,a3,A){
+    
+    if (tfi[0] === 0) {
         return u0 (s1,s2,s3,a1,a2,a3,A)
     }
-    else if (t2 === 0) {
+    else if (tfi[1] === 0) {
         return u1 (s1,s2,s3,a1,a2,a3,A)
     }
-    else if (t3 === 0) {
+    else if (tfi[2] === 0) {
         return u2 (s1,s2,s3,a1,a2,a3,A)
     }
     else {
