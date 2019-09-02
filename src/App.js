@@ -30,6 +30,18 @@ const radiationMarks = {
   100:100
 };
 
+const opacityMarks = {
+  0.01:0.01,
+  0.5:0.1,
+  1:1
+}
+
+const scaMarks = {
+  0:0,
+  0.5:0.5,
+  1:1
+}
+
 const defaultMarks = {
   0:0,
   0.2:0.2,
@@ -47,8 +59,8 @@ class App extends Component {
     // Default loaded examples
     var layer1 = {
       layerNumber: 1,
-      alpha: 0.7,//longwave opacity
-      opa: 0.4,//shortwave opacity
+      alpha: 0.1,//longwave opacity
+      opa: 0.1,//shortwave opacity
       sca: 0.5//single scattering albedo
     };
 
@@ -104,7 +116,7 @@ class App extends Component {
     // 2. Make a shallow copy of the item you want to mutate
     let layer = { ...newLayers[layerNumber - 1] };
     // 3. Replace the property you're intested in
-    layer.alpha = alphaValue;
+    layer.alpha = Math.pow(10,alphaValue*2-2);
     // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
     newLayers[layerNumber - 1] = layer;
     // 5. Set the state to our new copy
@@ -126,7 +138,7 @@ class App extends Component {
   changeOpa(layerNumber, opaValue) {
     let newLayers = [...this.state.layers];
     let layer = { ...newLayers[layerNumber - 1] };
-    layer.opa = opaValue;
+    layer.opa = Math.pow(10,opaValue*2-2); //reverse of (Math.log10(x)+2)/2
     newLayers[layerNumber - 1] = layer;
     this.setState({ layers: newLayers });
 
@@ -187,8 +199,8 @@ class App extends Component {
   addNewDefaultLayer() {
     var newLayer = {
       layerNumber: this.state.layers.length + 1,
-      alpha: 0.5,
-      opa: 0.5,
+      alpha: 0.1,
+      opa: 0.1,
       sca:0.5
     }
     this.addNewLayer(newLayer);
@@ -285,7 +297,7 @@ class App extends Component {
 
                 <SingleSettingController position="last">
                   <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha} opaHandler={this.changeOpa} scaHandler={this.changeSca} >
-                    <AtmLayer removeLayer={this.removeLayer} />
+                    <AtmLayer marks={opacityMarks} scaMarks = {scaMarks} removeLayer={this.removeLayer}  />
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
