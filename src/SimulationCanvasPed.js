@@ -2,12 +2,12 @@ import React from 'react';
 import { getSurfaceTemp, getLayerTemp } from './CalcPed.js'
 
 // import { FaRegistered } from 'react-icons/fa';
-
+/*
 const unicodeSubscriptDict = {
     0: '₀',
     1: '₁'
 }
-
+*/
 class SimulationCanvasPed extends React.Component {
 
     
@@ -60,6 +60,22 @@ class SimulationCanvasPed extends React.Component {
         // Clear the canvas to draw new simulation
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        if (e !== 0) {
+
+            // if there is an atmosphere;
+
+            ctx.beginPath();
+
+            ctx.arc(planetX, planetY, planetRadius + 90, -Math.PI, Math.PI);
+
+            ctx.strokeStyle = "#99ccff";
+
+            ctx.lineWidth = 250;//getLayerWidth(e);
+
+            ctx.stroke()
+
+        }
+
         // Draw the star
         ctx.beginPath();
         ctx.arc(-25,-100,175,0,3/2*Math.PI)
@@ -79,26 +95,10 @@ class SimulationCanvasPed extends React.Component {
         ctx.fill();
 
         // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 181, 270, 298, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
-        drawArrow(ctx, 270, 181, 270, 65, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
+        drawArrow(ctx, 270, 211, 270, 328, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
+        drawArrow(ctx, 270, 190, 270, 74, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
  
 
-
-         if (e !== 0) {
-
-                // if there is an atmosphere;
-
-                ctx.beginPath();
-
-                ctx.arc(planetX, planetY, planetRadius + 170, -Math.PI, Math.PI);
-
-                ctx.strokeStyle = "#99ccff";
-
-                ctx.lineWidth = getLayerWidth(e);
-
-                ctx.stroke()
-
-            }
 
 
         
@@ -130,11 +130,15 @@ class SimulationCanvasPed extends React.Component {
                 ctx.lineWidth = 0.5;
                 let tx = 300
                 let ty = 218 - 25 * 1
-                ctx.clearRect(tx - 10, ty - 17, 110, 20)
+                ctx.clearRect(tx - 12, ty - 17, 112, 22)
                 // ctx.clearRect(tx - 10, ty - 17, 110, 24)
-                ctx.rect(tx - 10, ty - 17, 110, 20)
+                ctx.rect(tx - 12, ty - 17, 112, 22)
                 ctx.stroke()
-                ctx.fillText("T" + unicodeSubscriptDict[1] + "= " + layerTempCel + "°C", tx, ty);
+                ctx.fillText("T  = " + layerTempCel + "°C", tx-6, ty+1);
+                //couldn't figure out how to write subscripts
+                ctx.font = "9px Arial";
+                ctx.fillText("atm", tx+2, ty+1);
+                ctx.font = "20px Arial";
             }
         
 
@@ -144,14 +148,29 @@ class SimulationCanvasPed extends React.Component {
         ctx.fillStyle = "white";
         ctx.lineWidth = 0.5;
         ctx.stroke()
-        ctx.fillText("T"+unicodeSubscriptDict[0]+" without greenhouse effect = "+(surfaceTempCel-deltaTemp)+ "°C", 60, 430);
+        if (this.props.language){
+            ctx.fillText("T    without greenhouse effect = "+(surfaceTempCel-deltaTemp)+ "°C", 50, 430);
+        }
+        else{
+            ctx.fillText("T    sans effect de serre = "+(surfaceTempCel-deltaTemp)+ "°C", 50, 430);
+        }
+        ctx.font = "10px Arial";
+        ctx.fillText("surf", 60 , 430 );
+        ctx.font = "20px Arial";
+        
+
 
         ctx.beginPath()
         ctx.strokeStyle = "white";
         ctx.fillStyle = "white";
         ctx.lineWidth = 0.5;
         ctx.stroke()
-        ctx.fillText("ΔT = " + deltaTemp + "°C", 60, 460);
+        if (this.props.language){
+            ctx.fillText("Greenhouse effect : " + deltaTemp + "°C", 50, 460);
+        }else{
+            ctx.fillText("Effet de serre : " + deltaTemp + "°C", 50, 460);
+        }
+        
 
 
         // Surface temperature label
@@ -159,12 +178,15 @@ class SimulationCanvasPed extends React.Component {
         ctx.strokeStyle = "black";
         ctx.fillStyle = "black";
         ctx.lineWidth = 0.5;
-        let tx = 175
+        let tx = 300
         let ty = 380
-        ctx.clearRect(tx - 10, ty - 17, 235, 23)
-        ctx.rect(tx - 10, ty - 17, 235, 23)
+        ctx.clearRect(tx - 12, ty - 17, 112, 22)
+        ctx.rect(tx - 12, ty - 17, 112, 22)
         ctx.stroke()
-        ctx.fillText("Surface temp. T" + unicodeSubscriptDict[0] + "= " + surfaceTempCel + "°C", tx, ty);
+        ctx.fillText("T  = " + surfaceTempCel + "°C", tx-6, ty+1);
+        ctx.font = "9px Arial";
+        ctx.fillText("surf", tx+2, ty+1);
+        ctx.font = "20px Arial";
     }
 
 
@@ -218,6 +240,7 @@ function rgb(r, g, b){
 }
 
 //********** The following functions rescale input for width or color */
+
 
 function getLayerWidth(e){
 

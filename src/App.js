@@ -15,6 +15,7 @@ import SimulationCanvas from './SimulationCanvas';
 import SimulationCanvasPed from './SimulationCanvasPed';
 
 import VersionSwitch from './SwitchContainer';
+import LanguageSwitch from './LanguageSwitch';
 
 /**
  * We will need multiple components. All data should be accessed through the parents, passed through props. To add data to a state of a component,
@@ -51,6 +52,15 @@ const defaultMarks = {
   1:1
 }
 
+const percentageMarks = {
+  0:"0%",
+  20:"20%",
+  40:"40%",
+  60:"60%",
+  80:"80%",
+  99:"100%"
+}
+
 class App extends Component {
 
   constructor(props) {
@@ -82,7 +92,8 @@ class App extends Component {
       nameCountPed: 1,
       layers: [layer1],
       layerPed: [layerPed],
-      checked: true //switch state "true" = beginner (pedagogical) version
+      checked: true, //switch state "true" = beginner (pedagogical) version
+      english: true //language either English or French
     };
 
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
@@ -100,14 +111,25 @@ class App extends Component {
     this.changeOpa = this.changeOpa.bind(this);
     this.changeSca = this.changeSca.bind(this);
     this.changeVersion = this.changeVersion.bind(this);
+    this.changeLanguage = this.changeLanguage.bind(this);
   }
 
   changeVersion(checked) {
     this.setState({ checked: checked === true ? true : false });
+    //sets the state of the version toggle
+  }
+
+  changeLanguage(checked) {
+    this.setState({ english: checked === true ? true : false });
+    //sets the state of the language toggle
   }
 
   outputState(){
       return this.state.checked;
+  }
+
+  outputLa(){
+    return this.state.english;
   }
 
   changeAlpha(layerNumber, alphaValue) {
@@ -161,7 +183,7 @@ class App extends Component {
 
   changeAlbedoPed(newValue) {
     this.setState({
-      planetaryAlbedoPed : newValue
+      planetaryAlbedoPed : newValue/100
     })
   }
 
@@ -266,22 +288,119 @@ class App extends Component {
 
 //added conditional rendering for switch
   render() { 
+    if (this.state.english){
+      return (
+        <div className="App">
+            <span className="topcorner">
+            <font color="#797878" font-weight="bold">French&nbsp;</font>
+            <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
+            <font color="white" font-weight="bold">&nbsp;English&nbsp;&nbsp;</font>
+            </span>
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Climate App 3.1</h1>
+
+            {this.state.checked === false ?
+            <span className="App-intro">
+             Advanced&nbsp;
+            <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
+            <font color="#797878" font-weight="bold" >&nbsp;Beginner&nbsp;&nbsp;</font>
+            </span>
+            :
+            <span className="App-intro">
+            <font color="#797878" font-weight="bold">Advanced&nbsp;</font>
+            <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
+            &nbsp;Beginner&nbsp;&nbsp;
+            </span>} 
+          </header>
+        {this.state.checked === false ?            
+          
+          <main role="main">
+            <div className="main-frame">
+              <div className="main-container">
+                <div className="setting-container">
+                  <SingleSettingController>
+                    <SliderSetting language={this.state.english} description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."
+                    settingName="Stellar Radiation" maxSettingValue={100} step={0.1} 
+                    default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
+                    setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
+                    marks={radiationMarks} units={"S₀"}/>
+                  </SingleSettingController>
+                  
+  
+                  <SingleSettingController position="last">
+                    <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha} opaHandler={this.changeOpa} scaHandler={this.changeSca} >
+                      <AtmLayer marks={opacityMarks} scaMarks = {scaMarks} removeLayer={this.removeLayer}  />
+                    </LayerContainer>
+                  </SingleSettingController>
+                  <SingleSettingController>
+                    <SliderSetting language={this.state.english} description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  </SingleSettingController>
+                </div>
+                <div className="simulation-container" >
+                  Trenberth Diagram
+                <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
+                </div>
+              </div>
+            </div>
+          </main>
+          :
+          
+          <main role="main">
+            <div className="main-frame">
+              <div className="main-container">
+                <div className="setting-container">
+                  <SingleSettingController>
+                    <SliderSettingPed language={this.state.english} description="The amount of starlight that reaches the planet." settingName="Energy from star" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"x what Earth receives from the Sun"}/>
+                  </SingleSettingController>
+                  <SingleSettingController>
+                    <LayerContainerPed settingName="Atmosphere" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
+                      <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.english} />
+                    </LayerContainerPed>
+                  </SingleSettingController>
+                  <SingleSettingController position = 'last'>
+                    <SliderSettingPed description="Fraction of starlight reflected by planet." settingName="Planetary Reflectivity" maxSettingValue={99} step={1} default={(this.state.planetaryAlbedoPed*100).toFixed(0)} setting={(this.state.planetaryAlbedoPed*100).toFixed(0)} units={"%"} handler={this.changeAlbedoPed} marks={percentageMarks}/>
+                  </SingleSettingController>
+  
+                  
+                </div>
+                <div className="simulation-container" >
+                  Simulation
+                <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.english}/>
+                </div>
+              </div>
+            </div>
+          </main>}
+          <footer className="App-footer">
+            <p>L. X. Zhu | A. Courchesne | J. C. Schwartz | N. Cowan | McGill University 2021 | <a href="https://climateapp.ca/public/Instructions.pdf">How does this work ?</a></p>
+          </footer>
+        </div>
+      );
+    }
+
+    else{
     return (
       <div className="App">
+        <span className="topcorner">
+            <font color="white" font-weight="bold">Français&nbsp;</font>
+            <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
+            <font color="#797878" font-weight="bold">&nbsp;Anglais&nbsp;&nbsp;</font>
+        </span>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Climate App 3.0</h1>
+          <h1 className="App-title">Appli Climat 3.1</h1>
+
           {this.state.checked === false ?
           <span className="App-intro">
-          Advanced&nbsp;
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avancé&nbsp;
           <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-          <font color="#797878" font-weight="bold" >&nbsp;Beginner&nbsp;&nbsp;</font>
+          <font color="#797878" font-weight="bold" >&nbsp;Débutant&nbsp;&nbsp;</font>
           </span>
           :
           <span className="App-intro">
-          <font color="#797878" font-weight="bold">Advanced&nbsp;</font>
+          <font color="#797878" font-weight="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avancé&nbsp;</font>
           <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-          &nbsp;Beginner&nbsp;&nbsp;
+          &nbsp;Débutant&nbsp;&nbsp;
           </span>} 
         </header>
       {this.state.checked === false ?            
@@ -291,7 +410,11 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."settingName="Stellar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiation)+2)*100/4} setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} marks={radiationMarks} units={"S₀"}/>
+                  <SliderSetting language={this.state.english} description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."
+                  settingName="Stellar Radiation" maxSettingValue={100} step={0.1} 
+                  default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
+                  setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
+                  marks={radiationMarks} units={"S₀"}/>
                 </SingleSettingController>
                 
 
@@ -301,7 +424,7 @@ class App extends Component {
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  <SliderSetting language={this.state.english} description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                 </SingleSettingController>
               </div>
               <div className="simulation-container" >
@@ -318,31 +441,32 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSettingPed description="The amount of radiation from the star that reaches the planet." settingName="Solar Radiation" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"Solar Flux at Earth"}/>
+                  <SliderSettingPed language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète." settingName="Énergie de l'étoile" maxSettingValue={100} step={0.1} default={((Math.log10(this.state.stellarRadiationPed)+2)*100/4)} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"x ce que la Terre reçoit du Soleil"}/>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <LayerContainerPed settingName="Atmosphere" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
-                    <AtmLayerPed removeLayer={this.removeLayerPed} />
+                  <LayerContainerPed settingName="Atmosphère" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
+                    <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.english} />
                   </LayerContainerPed>
                 </SingleSettingController>
                 <SingleSettingController position = 'last'>
-                  <SliderSettingPed description="How reflective the planet surface is to solar radiation.<br/> A value of 1 means complete reflection." settingName="Planetary Reflectivity" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedoPed} setting={this.state.planetaryAlbedoPed} handler={this.changeAlbedoPed} marks={defaultMarks}/>
+                  <SliderSettingPed description="Fraction de lumière de l'étoile qui est réfléchie par la planète." settingName="Réflectivité de la planète" maxSettingValue={99} step={1} default={(this.state.planetaryAlbedoPed*100).toFixed(0)} setting={(this.state.planetaryAlbedoPed*100).toFixed(0)} units={"%"} handler={this.changeAlbedoPed} marks={percentageMarks}/>
                 </SingleSettingController>
 
                 
               </div>
               <div className="simulation-container" >
                 Simulation
-              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} />
+              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.english} />
               </div>
             </div>
           </div>
         </main>}
         <footer className="App-footer">
-          <p>L. X. Zhu | A. Courchesne | J. C. Schwartz | N. Cowan | McGill University 2019 | <a href="https://climateapp.ca/public/Instructions.pdf">How does this work ?</a></p>
+          <p>L. X. Zhu | A. Courchesne | J. C. Schwartz | N. Cowan | Université McGill 2021 | <a href="https://climateapp.ca/public/Instructions.pdf">Comment ça marche ?</a></p>
         </footer>
       </div>
     );
+      }
   }
 }
 

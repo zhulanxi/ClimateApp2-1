@@ -35,15 +35,51 @@ class AtmLayerPed extends Component {
                         </button>
                     </span>
                 </div>
+                
+                {this.props.language === true ?
                 <div className="core-line">
-                <p data-tip="The fraction of incident thermal radiation absorbed by the atmosphere.<br/>
-                A value of 1 means that the atmosphere absorbs all thermal radiation and re-emits them all." 
+                <p data-tip="Fraction of infrared light emitted by surface<br/> that is absorbed and re-emitted by atmosphere." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Infrared Opacity: {this.props.layer.alpha.toFixed(2)}</p>
+                        Infrared Opacity: {(this.props.layer.alpha*100).toFixed(0)} %</p>
+                        <ReactTooltip/>
+                        <div className="push-above"><Slider
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        trackStyle={{
+                            backgroundColor: '#4f97c5',
+                            height: 7
+                        }}
+                        handleStyle={{
+                            borderColor: '#4f97c5',
+                            borderWidth: 3,
+                            height: 20,
+                            width: 20,
+                            marginLeft:-10,
+                            marginTop: -7,
+                        }}
+                        railStyle={{
+                            backgroundColor: '#84b3d1',
+                            marginTop: 1
+                        }}
+                        defaultValue={this.props.layer.alpha}
+                        value={this.props.layer.alpha}
+                        onChange={(value) => this.handleChangeAlpha(value)} /></div>
+                </div>
+                        
+                :
+                <div className="core-line">
+                <p data-tip="Fraction de lumière infrarouge émise par la surface<br/>qui est absorbée et réémise par l'atmosphère." 
+                    data-place="top"
+                    data-effect="solid" 
+                    data-type="info"
+                    data-delay-show='700'
+                    data-multiline="true">
+                        Opacité infrarouge: {(this.props.layer.alpha*100).toFixed(0)} %</p>
                         <ReactTooltip/>
                     <div className="push-above"><Slider
                         min={0}
@@ -68,7 +104,7 @@ class AtmLayerPed extends Component {
                         defaultValue={this.props.layer.alpha}
                         value={this.props.layer.alpha}
                         onChange={(value) => this.handleChangeAlpha(value)} /></div>
-                </div>
+                </div>}
             </div>
         );
     }

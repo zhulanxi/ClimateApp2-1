@@ -12,7 +12,7 @@ class LayerContainerPed extends Component {
         var layerBoxes = (
             this.props.layer.slice(0).reverse().map((_layer, index) => {
                 // this.props.layers.map((_layer, index) => {
-                    const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler }); //Used to add props
+                    const childrenWithProps = React.cloneElement(this.props.children, { layer: _layer, alphaHandler: this.props.alphaHandler}); //Used to add props
                 return (
                     <React.Fragment key={index}>
                         <SmallContainer>
