@@ -93,7 +93,7 @@ class App extends Component {
       layers: [layer1],
       layerPed: [layerPed],
       checked: true, //switch state "true" = beginner (pedagogical) version
-      english: true //language either English or French
+      english: false //language either English or French
     };
 
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
