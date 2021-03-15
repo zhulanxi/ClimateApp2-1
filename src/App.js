@@ -457,7 +457,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète."
+                  <SliderSetting language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint le sommet de l'atmosphère."
                   settingName="Radiation stellaire" maxSettingValue={100} step={0.1} 
                   default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
                   setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
