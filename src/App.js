@@ -138,7 +138,7 @@ class App extends Component {
       layers: [layer1, layer2, layer3],
       layerPed: [layerPed],
       checked: false, //switch state "true" = beginner (pedagogical) version
-      english: true //language either English (true) or French (false)
+      english: false //language either English (true) or French (false)
       //If more languages are added in the future, maybe use
       //language: 'en'; language: 'fr'; instead
     };
