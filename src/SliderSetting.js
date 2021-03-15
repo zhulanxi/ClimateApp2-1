@@ -60,7 +60,7 @@ class SliderSetting extends Component {
                         data-type="info"
                         data-delay-show='700'
                         data-multiline="true">
-                        {this.props.settingName}: {this.props.setting} {this.props.units}</p>
+                        {this.props.settingName}: {this.props.setting.toString().replace('.',',')} {this.props.units}</p>
                         <ReactToolTip/>
                     <Slider
                         marks={this.props.marks}

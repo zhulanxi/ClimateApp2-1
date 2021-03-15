@@ -30,6 +30,8 @@ class SimulationCanvas extends React.Component {
         const planetY = 1050;
         const planetRadius = 700;
 
+        const language = this.props.language;
+
         const sbc = 5.670367e-8;
         const a = this.props.planetaryAlbedo;
         const s = this.props.stellarRadiation;
@@ -38,6 +40,14 @@ class SimulationCanvas extends React.Component {
         const e2 = typeof this.props.layers[1] === "undefined" ? 0 : this.props.layers[1].alpha;
         const e3 = typeof this.props.layers[2] === "undefined" ? 0 : this.props.layers[2].alpha;
         const ei = [e1,e2,e3]
+
+        var a_exist = true;
+
+        if ((typeof this.props.layers[0] === "undefined") && 
+            (typeof this.props.layers[1] === "undefined") &&
+            (typeof this.props.layers[2] === "undefined")){
+                a_exist = false;
+            }
 
         //whether a certain layer exists, tf stands for true or false
         const tf1 = typeof this.props.layers[0] === "undefined" ? 0 : 1;
@@ -73,6 +83,16 @@ class SimulationCanvas extends React.Component {
         // Clear the canvas to draw new simulation
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Draw the Global (Thick) atmosphere
+        if (a_exist){
+            ctx.beginPath();
+            ctx.arc(planetX,planetY, planetRadius + 90 , -Math.PI, Math.PI)
+            ctx.strokeStyle = "#99ccff"
+        ctx.lineWidth = 250
+            ctx.stroke()
+        }
+
+
         // Draw the star
         ctx.beginPath();
         ctx.arc(-25,-100,175,0,3/2*Math.PI)
@@ -80,19 +100,12 @@ class SimulationCanvas extends React.Component {
         ctx.fill();
 
 
-
-        // Draw the planet
-        ctx.beginPath();
-        ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
-        ctx.fillStyle = getPlanetColor(a);
-        ctx.fill();
-
         // Draw stellar radiation arrow
         drawArrow(ctx, 18, 65, 30, 135, getStellarWidth(), shortwaveColor)
 
         //Draw stellar radiation arrow after absorption
         //From atm to ground is just d1 (down from layer 1)
-        drawArrow(ctx, 40,180, 68, 330, 
+        drawArrow(ctx, 49,232, 68, 330, 
             getAtmToGroundWidthFactor(s1, s2, s3, a1, a2, a3,a)*getStellarWidth(), shortwaveColor )
 //was 40 180
         // Draw reflected shortwave
@@ -104,38 +117,24 @@ class SimulationCanvas extends React.Component {
 
         //Draw shortwave from TOA to space
         //u3
-        drawArrow (ctx, 118, 200, 132, 77, 
+        drawArrow (ctx, 122, 155, 132, 77, 
             getEffectiveAlbedo(tfi, s1, s2, s3, a1, a2, a3,a)*getStellarWidth(),shortwaveColor)
         
 
         // Draw longwave atmospheric downward emission
-        drawArrow(ctx, 180, 200, 180, 320, getAtmosphericRadiationBotWidth(sbc, layerTemps,s0,ei), longwaveColor )
+        drawArrow(ctx, 180, 215, 180, 320, getAtmosphericRadiationBotWidth(sbc, layerTemps,s0,ei), longwaveColor )
         //drawArrow(ctx, 270, 155, 270, 40, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor )
 
         // Draw TOA to space longwave emission (TopWidth+escaping)
         if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
-            drawArrow(ctx, 230, 200, 230, 50, getEscapingSurfaceEmissionWidth(sbc, surfaceTemp, s0, ei)+ getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
+            drawArrow(ctx, 230, 150, 230, 50, getEscapingSurfaceEmissionWidth(sbc, surfaceTemp, s0, ei)+ getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
         } else{
-            drawArrow(ctx, 230, 200, 230, 50, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
+            drawArrow(ctx, 230, 150, 230, 50, getAtmosphericRadiationTopWidth(sbc,layerTemps, s0,ei), longwaveColor)
         }
 
 
         // Draw longwave planet emission
-        drawArrow(ctx, 290, 362, 290, 260, getSurfaceEmissionWidth(sbc,surfaceTemp, s0), longwaveColor )
-
-        // Draw the planet
-        ctx.beginPath();
-        ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
-        ctx.fillStyle = getPlanetColor(a);
-        ctx.fill();
-
-
-        // Draw the Global (Thick) atmosphere
-        ctx.beginPath();
-        ctx.arc(planetX,planetY, planetRadius + 170 , -Math.PI, Math.PI)
-        ctx.strokeStyle = "#99ccff"
-        ctx.lineWidth = 62
-        ctx.stroke()
+        drawArrow(ctx, 290, 362, 290, 280, getSurfaceEmissionWidth(sbc,surfaceTemp, s0), longwaveColor )
 
         // maxLayer = -1
         // Draw the multiple atmospheric layers
@@ -150,6 +149,11 @@ class SimulationCanvas extends React.Component {
                 ctx.stroke()
             }
         }
+        // Draw the planet
+        ctx.beginPath();
+        ctx.arc(planetX, planetY, planetRadius, -Math.PI, Math.PI);
+        ctx.fillStyle = getPlanetColor(a);
+        ctx.fill();
 
         // Clear space to output temperatures labels, not really necessary
         // if (maxLayer>=0){
@@ -190,10 +194,16 @@ class SimulationCanvas extends React.Component {
         ctx.beginPath()
         ctx.font="15px Arial"
         ctx.fillStyle = "black";
-        ctx.fillText("Effective", 80, 50);
-        ctx.fillText(" albedo: ", 80, 65);//just making the two words
-        // to appear on different lines
-        ctx.fillText(getEffectiveAlbedo(tfi, s1,s2,s3,a1,a2,a3, a).toFixed(2), 140, 60);
+        if (language){
+            ctx.fillText("Effective", 80, 50);
+            ctx.fillText(" albedo: ", 80, 65);//just making the two words
+            // to appear on different lines
+            ctx.fillText(getEffectiveAlbedo(tfi, s1,s2,s3,a1,a2,a3, a).toFixed(2), 137, 65);
+        }else{
+            ctx.fillText("Albédo", 83, 50);
+            ctx.fillText("effectif: ", 83, 65);
+            ctx.fillText(getEffectiveAlbedo(tfi, s1,s2,s3,a1,a2,a3, a).toFixed(2).toString().replace('.',','), 137, 65);
+        }
     }
 
 

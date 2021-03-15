@@ -32,7 +32,7 @@ class SimulationCanvasPed extends React.Component {
         const a = this.props.planetaryAlbedo;
         const s = this.props.stellarRadiation;
         const s0 = s*1361/4;
-        const e = typeof this.props.layer[0] === "undefined" ? 0 : this.props.layer[0].alpha;
+        const e = typeof this.props.layer[0] === "undefined" ? -1 : this.props.layer[0].alpha;
 
         const shortwaveColor = "#ffd11a"
         const longwaveColor = "#ff3333"
@@ -60,7 +60,7 @@ class SimulationCanvasPed extends React.Component {
         // Clear the canvas to draw new simulation
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (e !== 0) {
+        if (e !== -1) {
 
             // if there is an atmosphere;
 
@@ -70,7 +70,7 @@ class SimulationCanvasPed extends React.Component {
 
             ctx.strokeStyle = "#99ccff";
 
-            ctx.lineWidth = 250;//getLayerWidth(e);
+            ctx.lineWidth = 250;
 
             ctx.stroke()
 
@@ -84,9 +84,12 @@ class SimulationCanvasPed extends React.Component {
         
         // Draw longwave planet emission
         //y=181 is approximately the midway of the atmosphere
-        drawArrow(ctx, 165, 355, 165, 186+getLayerWidth(e), getLayerAbsorbedEmission(sbc,surfaceTemp, s0,e), longwaveColor )
+        drawArrow(ctx, 225, 355, 225, 186+getLayerWidth(e), getLayerAbsorbedEmission(sbc,surfaceTemp, s0,e), longwaveColor )
 
-
+        // Draw longwave planet emission that is not absorbed by atmosphere
+        //if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
+        drawArrow(ctx, 175, 355, 175, 50, getEscapingSurfaceEmissionWidth(sbc,surfaceTemp, s0, e), longwaveColor)
+        //}
 
         // Draw the planet
         ctx.beginPath();
@@ -95,13 +98,9 @@ class SimulationCanvasPed extends React.Component {
         ctx.fill();
 
         // Draw longwave atmospheric emission
-        drawArrow(ctx, 270, 211, 270, 328, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
-        drawArrow(ctx, 270, 190, 270, 74, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
+        drawArrow(ctx, 280, 211, 280, 328, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
+        drawArrow(ctx, 280, 190, 280, 74, getAtmosphericRadiationTopWidth(sbc,layerTemp, e, s0), longwaveColor )
  
-
-
-
-        
         // Draw stellar radiation arrow
         drawArrow(ctx, 10, 65, 64, 330, getStellarWidth(), shortwaveColor)
 
@@ -110,10 +109,6 @@ class SimulationCanvasPed extends React.Component {
             drawArrow(ctx, 90, 355, 150, 94, getReflectedStellarWidth(a), shortwaveColor)
         }
 
-        // Draw longwave planet emission that is not absorbed by atmosphere
-        //if((1-ei[0])*(1-ei[1])*(1-ei[2]) > 0 ){
-        drawArrow(ctx, 215, 350, 215, 50, getEscapingSurfaceEmissionWidth(sbc,surfaceTemp, s0, e), longwaveColor)
-        //}
 
         
         // Clear space to output temperatures labels, not really necessary

@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 
 
-class AtmLayer extends Component {
+class AtmLayerFr extends Component {
     //The box containing sliders for individual atmospheric layer.
     //This component should be enclosed in a SmallContainer
     constructor(props) {
@@ -41,7 +41,7 @@ class AtmLayer extends Component {
         return (
             <div className="atm-layer">
                 <div className="header-line">
-                    <span className="layer-name"><b>Layer {this.props.layer.layerNumber}</b></span>
+                    <span className="layer-name"><b>Couche {this.props.layer.layerNumber}</b></span>
                     {this.props.layerCount === 1 ?
                     <span></span>
                     :<span className="layer-tools">
@@ -51,13 +51,13 @@ class AtmLayer extends Component {
                     </span>}
                 </div>
                 <div className="core-line">
-                    <p data-tip="Fraction of starlight that interacts with the atmospheric layer." 
+                    <p data-tip="Fraction de la lumière de l'étoile qui interagit avec la couche atmosphérique." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Shortwave Opacity: {this.props.layer.opa.toFixed(2)}</p>
+                        Opacité à courte longueurs d'onde: {this.props.layer.opa.toFixed(2).toString().replace('.',',')}</p>
                         <ReactTooltip/>
                     <div className="push-above"><Slider
                     marks={this.props.marks}
@@ -89,13 +89,13 @@ class AtmLayer extends Component {
                         value={(Math.log10(this.props.layer.opa)+2)/2}
                         onChange={(value) => this.handleChangeOpa(value)} /></div>
                     <p></p>
-                    <p data-tip="Fraction of starlight interacting with the atmospheric layer that is scattered." 
+                    <p data-tip="Fraction de la lumière interagissant avec la couche atmosphérique qui est diffusée." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Single Scattering Albedo: {this.props.layer.sca.toFixed(2)}</p>
+                        Albédo de diffusion simple: {this.props.layer.sca.toFixed(2).toString().replace('.',',')}</p>
                     
                     <div className="push-above"><Slider
                     marks={this.props.scaMarks}
@@ -127,13 +127,13 @@ class AtmLayer extends Component {
                         value={this.props.layer.sca}
                         onChange={(value) => this.handleChangeSca(value)} /></div>
                         <p></p>
-                    <p data-tip="Fraction of thermal radiation that is absorbed by the atmospheric layer." 
+                    <p data-tip="Fraction de la lumière infrarouge qui est absorbée par la couche atmosphérique." 
                     data-place="top"
                     data-effect="solid" 
                     data-type="info"
                     data-delay-show='700'
                     data-multiline="true">
-                        Longwave Opacity: {this.props.layer.alpha.toFixed(2)}</p>
+                        Opacité à longue longueurs d'onde: {this.props.layer.alpha.toFixed(2).toString().replace('.',',')}</p>
                     
                     <div className="push-above"><Slider
                     marks={this.props.marks}
@@ -171,4 +171,4 @@ class AtmLayer extends Component {
     }
 }
 
-export default AtmLayer;
+export default AtmLayerFr;

@@ -7,6 +7,7 @@ import './App.css';
 import LayerContainer from './LayerContainer';
 import LayerContainerPed from './LayerContainerPed';
 import AtmLayer from './AtmLayer';
+import AtmLayerFr from './AtmLayerFr';
 import AtmLayerPed from './AtmLayerPed';
 import SingleSettingController from './SingleSettingController';
 import SliderSetting from './SliderSetting';
@@ -31,9 +32,23 @@ const radiationMarks = {
   100:100
 };
 
+const radiationMarksFr = {
+  0: '0,01',
+  25: '0,1',
+  50: <strong>1</strong>,
+  75:10,
+  100:100
+};
+
 const opacityMarks = {
   0.01:0.01,
   0.5:0.1,
+  1:1
+}
+
+const opacityMarksFr = {
+  0.01:'0,01',
+  0.5:'0,1',
   1:1
 }
 
@@ -43,12 +58,27 @@ const scaMarks = {
   1:1
 }
 
+const scaMarksFr = {
+  0:0,
+  0.5:'0,5',
+  1:1
+}
+
 const defaultMarks = {
   0:0,
   0.2:0.2,
   0.4:0.4,
   0.6:0.6,
   0.8:0.8,
+  1:1
+}
+
+const defaultMarksFr = {
+  0:0,
+  0.2:'0,2',
+  0.4:'0,4',
+  0.6:'0,6',
+  0.8:'0,8',
   1:1
 }
 
@@ -69,14 +99,29 @@ class App extends Component {
     // Default loaded examples
     var layer1 = {
       layerNumber: 1,
-      alpha: 0.1,//longwave opacity
-      opa: 0.1,//shortwave opacity
-      sca: 0.5//single scattering albedo
+      alpha: 0.66,//longwave opacity
+      opa: 0.32,//shortwave opacity
+      sca: 1.00//single scattering albedo
     };
+
+    var layer2 = {
+      layerNumber: 2,
+      alpha: 0.30,//longwave opacity
+      opa: 0.08,//shortwave opacity
+      sca: 1.00//single scattering albedo
+    };
+
+    var layer3 = {
+      layerNumber: 3,
+      alpha: 0.02,//longwave opacity
+      opa: 0.0175,//shortwave opacity
+      sca: 0.00//single scattering albedo
+    };
+
 
     var layerPed = {
       layerNumber: 1,
-      alpha: 0.7
+      alpha: 0.78
     }
 
     /*
@@ -86,14 +131,16 @@ class App extends Component {
     this.state = {
       stellarRadiation: 1,
       stellarRadiationPed: 1,
-      planetaryAlbedo: 0.3,
+      planetaryAlbedo: 0.18,
       planetaryAlbedoPed: 0.3,
       nameCount: 3,
       nameCountPed: 1,
-      layers: [layer1],
+      layers: [layer1, layer2, layer3],
       layerPed: [layerPed],
-      checked: true, //switch state "true" = beginner (pedagogical) version
-      english: false //language either English or French
+      checked: false, //switch state "true" = beginner (pedagogical) version
+      english: true //language either English (true) or French (false)
+      //If more languages are added in the future, maybe use
+      //language: 'en'; language: 'fr'; instead
     };
 
     this.addNewDefaultLayer = this.addNewDefaultLayer.bind(this);
@@ -231,7 +278,7 @@ class App extends Component {
   addNewDefaultLayerPed() {
     var newLayer = {
       layerNumber: 1,
-      alpha: 0.7
+      alpha: 0.5
     }
     this.addNewLayerPed(newLayer);
   }
@@ -294,33 +341,33 @@ class App extends Component {
             <span className="topcorner">
             <font color="#797878" font-weight="bold">French&nbsp;</font>
             <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
-            <font color="white" font-weight="bold">&nbsp;English&nbsp;&nbsp;</font>
+            <font color="white" font-weight="bold">&nbsp;English&nbsp;</font>
             </span>
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Climate App 3.1</h1>
 
-            {this.state.checked === false ?
+            {this.state.checked === true ?
             <span className="App-intro">
-             Advanced&nbsp;
+            <font color="#797878" font-weight="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beginner&nbsp;</font>
             <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-            <font color="#797878" font-weight="bold" >&nbsp;Beginner&nbsp;&nbsp;</font>
+            &nbsp;Advanced&nbsp;&nbsp;
             </span>
             :
             <span className="App-intro">
-            <font color="#797878" font-weight="bold">Advanced&nbsp;</font>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beginner&nbsp;
             <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-            &nbsp;Beginner&nbsp;&nbsp;
+            <font color="#797878" font-weight="bold" >&nbsp;Advanced&nbsp;&nbsp;</font>
             </span>} 
           </header>
-        {this.state.checked === false ?            
+        {this.state.checked === true ?            
           
           <main role="main">
             <div className="main-frame">
               <div className="main-container">
                 <div className="setting-container">
                   <SingleSettingController>
-                    <SliderSetting language={this.state.english} description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."
+                    <SliderSetting language={this.state.english} description="The amount of starlight that reaches the top of the atmosphere."
                     settingName="Stellar Radiation" maxSettingValue={100} step={0.1} 
                     default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
                     setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
@@ -330,16 +377,16 @@ class App extends Component {
   
                   <SingleSettingController position="last">
                     <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha} opaHandler={this.changeOpa} scaHandler={this.changeSca} >
-                      <AtmLayer marks={opacityMarks} scaMarks = {scaMarks} removeLayer={this.removeLayer}  />
+                      <AtmLayer layerCount={this.state.layers.length} marks={opacityMarks} scaMarks = {scaMarks} removeLayer={this.removeLayer}  />
                     </LayerContainer>
                   </SingleSettingController>
                   <SingleSettingController>
-                    <SliderSetting language={this.state.english} description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                    <SliderSetting language={this.state.english} description="Fraction of starlight reflected by the planetary surface." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                   </SingleSettingController>
                 </div>
                 <div className="simulation-container" >
                   Trenberth Diagram
-                <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
+                <SimulationCanvas language={this.state.english} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
                 </div>
               </div>
             </div>
@@ -359,7 +406,7 @@ class App extends Component {
                     </LayerContainerPed>
                   </SingleSettingController>
                   <SingleSettingController position = 'last'>
-                    <SliderSettingPed description="Fraction of starlight reflected by planet." settingName="Planetary Reflectivity" maxSettingValue={99} step={1} default={(this.state.planetaryAlbedoPed*100).toFixed(0)} setting={(this.state.planetaryAlbedoPed*100).toFixed(0)} units={"%"} handler={this.changeAlbedoPed} marks={percentageMarks}/>
+                    <SliderSettingPed description="Fraction of starlight reflected by the planet." settingName="Planetary Reflectivity" maxSettingValue={99} step={1} default={(this.state.planetaryAlbedoPed*100).toFixed(0)} setting={(this.state.planetaryAlbedoPed*100).toFixed(0)} units={"%"} handler={this.changeAlbedoPed} marks={percentageMarks}/>
                   </SingleSettingController>
   
                   
@@ -384,52 +431,52 @@ class App extends Component {
         <span className="topcorner">
             <font color="white" font-weight="bold">Français&nbsp;</font>
             <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
-            <font color="#797878" font-weight="bold">&nbsp;Anglais&nbsp;&nbsp;</font>
+            <font color="#797878" font-weight="bold">&nbsp;Anglais&nbsp;</font>
         </span>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Appli Climat 3.1</h1>
 
-          {this.state.checked === false ?
+          {this.state.checked === true ?
           <span className="App-intro">
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avancé&nbsp;
+           <font color="#797878" font-weight="bold">&nbsp;Débutant&nbsp;</font>
           <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-          <font color="#797878" font-weight="bold" >&nbsp;Débutant&nbsp;&nbsp;</font>
+          &nbsp;Avancé&nbsp;&nbsp;
           </span>
           :
           <span className="App-intro">
-          <font color="#797878" font-weight="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avancé&nbsp;</font>
+          &nbsp;Débutant&nbsp;
           <VersionSwitch checked = {this.state.checked} handleChange = {this.changeVersion}/> 
-          &nbsp;Débutant&nbsp;&nbsp;
+          <font color="#797878" font-weight="bold" >&nbsp;Avancé&nbsp;&nbsp;</font>
           </span>} 
         </header>
-      {this.state.checked === false ?            
+      {this.state.checked === true ?            
         
         <main role="main">
           <div className="main-frame">
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting language={this.state.english} description="The amount of shortwave radiation from the star that reaches the top of the atmosphere."
-                  settingName="Stellar Radiation" maxSettingValue={100} step={0.1} 
+                  <SliderSetting language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète."
+                  settingName="Radiation stellaire" maxSettingValue={100} step={0.1} 
                   default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
                   setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
-                  marks={radiationMarks} units={"S₀"}/>
+                  marks={radiationMarksFr} units={"x ce que la Terre reçoit du Soleil"}/>
                 </SingleSettingController>
                 
 
                 <SingleSettingController position="last">
-                  <LayerContainer settingName="Atmospheric Layers" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha} opaHandler={this.changeOpa} scaHandler={this.changeSca} >
-                    <AtmLayer marks={opacityMarks} scaMarks = {scaMarks} removeLayer={this.removeLayer}  />
+                  <LayerContainer settingName="Couches atmosphériques" layers={this.state.layers} addNewDefaultLayer={this.addNewDefaultLayer} alphaHandler={this.changeAlpha} opaHandler={this.changeOpa} scaHandler={this.changeSca} >
+                    <AtmLayerFr layerCount={this.state.layers.length} marks={opacityMarksFr} scaMarks = {scaMarksFr} removeLayer={this.removeLayer}  />
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting language={this.state.english} description="Planetary surface reflectivity to shortwave radiation.<br/> A value of 1 means complete reflection." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                  <SliderSetting language={this.state.english} description="Fraction de la lumière de l'étoile qui est réfléchie par la surface planétaire." settingName="Albédo de la surface" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarksFr}/>
                 </SingleSettingController>
               </div>
               <div className="simulation-container" >
-                Trenberth Diagram
-              <SimulationCanvas planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
+                Diagramme de Trenberth
+              <SimulationCanvas language={this.state.english} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
               </div>
             </div>
           </div>
@@ -441,7 +488,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSettingPed language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète." settingName="Énergie de l'étoile" maxSettingValue={100} step={0.1} default={((Math.log10(this.state.stellarRadiationPed)+2)*100/4)} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"x ce que la Terre reçoit du Soleil"}/>
+                  <SliderSettingPed language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète." settingName="Énergie de l'étoile" maxSettingValue={100} step={0.1} default={((Math.log10(this.state.stellarRadiationPed)+2)*100/4)} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarksFr} units={"x ce que la Terre reçoit du Soleil"}/>
                 </SingleSettingController>
                 <SingleSettingController>
                   <LayerContainerPed settingName="Atmosphère" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
