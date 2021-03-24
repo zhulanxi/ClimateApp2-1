@@ -138,7 +138,7 @@ class App extends Component {
       layers: [layer1, layer2, layer3],
       layerPed: [layerPed],
       checked: false, //switch state "true" = beginner (pedagogical) version
-      french: false //language either English (false) or French (true)
+      french: true //language either English (false) or French (true)
       //If more languages are added in the future, maybe use
       //language: 'en'; language: 'fr'; instead
     };
@@ -167,7 +167,7 @@ class App extends Component {
   }
 
   changeLanguage(checked) {
-    this.setState({ french: checked === true ? true : false });
+    this.setState({ french: checked === true ? false : true });
     //sets the state of the language toggle
   }
 
@@ -339,9 +339,9 @@ class App extends Component {
       return (
         <div className="App">
             <span className="topcorner">
-            <font color="white" font-weight="bold">English&nbsp;</font>
-            <LanguageSwitch checked = {this.state.french} handleChange = {this.changeLanguage}/> 
-            <font color="#797878" font-weight="bold">&nbsp;French&nbsp;&nbsp;&nbsp;&nbsp;</font>
+            <font color="#797878" font-weight="bold">French&nbsp;</font>
+            <LanguageSwitch checked = {! this.state.french} handleChange = {this.changeLanguage}/> 
+            <font color="white" font-weight="bold">&nbsp;English&nbsp;</font>
             </span>
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
@@ -429,9 +429,9 @@ class App extends Component {
     return (
       <div className="App"> 
         <span className="topcorner">
-            <font color="#797878" font-weight="bold">Anglais&nbsp;</font>
-            <LanguageSwitch checked = {this.state.french} handleChange = {this.changeLanguage}/> 
-            <font color="white" font-weight="bold">&nbsp;Français&nbsp;</font>
+            <font color="white" font-weight="bold">Français&nbsp;</font>
+            <LanguageSwitch checked = {! this.state.french} handleChange = {this.changeLanguage}/> 
+            <font color="#797878" font-weight="bold">&nbsp;Anglais&nbsp;</font>
             </span>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
