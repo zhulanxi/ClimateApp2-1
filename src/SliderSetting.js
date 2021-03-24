@@ -10,7 +10,7 @@ import Slider from 'rc-slider';
 class SliderSetting extends Component {
 
     render() {
-        if (this.props.language){
+        if (! this.props.language){
         return (
             <div>
                 <p data-tip={this.props.description} 

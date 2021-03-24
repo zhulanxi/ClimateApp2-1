@@ -194,7 +194,7 @@ class SimulationCanvas extends React.Component {
         ctx.beginPath()
         ctx.font="15px Arial"
         ctx.fillStyle = "black";
-        if (language){
+        if (! language){
             ctx.fillText("Effective", 80, 50);
             ctx.fillText(" albedo: ", 80, 65);//just making the two words
             // to appear on different lines

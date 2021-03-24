@@ -138,7 +138,7 @@ class App extends Component {
       layers: [layer1, layer2, layer3],
       layerPed: [layerPed],
       checked: false, //switch state "true" = beginner (pedagogical) version
-      english: false //language either English (true) or French (false)
+      french: false //language either English (false) or French (true)
       //If more languages are added in the future, maybe use
       //language: 'en'; language: 'fr'; instead
     };
@@ -167,7 +167,7 @@ class App extends Component {
   }
 
   changeLanguage(checked) {
-    this.setState({ english: checked === true ? true : false });
+    this.setState({ french: checked === true ? true : false });
     //sets the state of the language toggle
   }
 
@@ -176,7 +176,7 @@ class App extends Component {
   }
 
   outputLa(){
-    return this.state.english;
+    return this.state.french;
   }
 
   changeAlpha(layerNumber, alphaValue) {
@@ -335,13 +335,13 @@ class App extends Component {
 
 //added conditional rendering for switch
   render() { 
-    if (this.state.english){
+    if (! this.state.french){
       return (
         <div className="App">
             <span className="topcorner">
-            <font color="#797878" font-weight="bold">French&nbsp;</font>
-            <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
-            <font color="white" font-weight="bold">&nbsp;English&nbsp;</font>
+            <font color="white" font-weight="bold">English&nbsp;</font>
+            <LanguageSwitch checked = {this.state.french} handleChange = {this.changeLanguage}/> 
+            <font color="#797878" font-weight="bold">&nbsp;French&nbsp;&nbsp;&nbsp;&nbsp;</font>
             </span>
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
@@ -367,7 +367,7 @@ class App extends Component {
               <div className="main-container">
                 <div className="setting-container">
                   <SingleSettingController>
-                    <SliderSetting language={this.state.english} description="The amount of starlight that reaches the top of the atmosphere."
+                    <SliderSetting language={this.state.french} description="The amount of starlight that reaches the top of the atmosphere."
                     settingName="Stellar Radiation" maxSettingValue={100} step={0.1} 
                     default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
                     setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
@@ -381,12 +381,12 @@ class App extends Component {
                     </LayerContainer>
                   </SingleSettingController>
                   <SingleSettingController>
-                    <SliderSetting language={this.state.english} description="Fraction of starlight reflected by the planetary surface." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
+                    <SliderSetting language={this.state.french} description="Fraction of starlight reflected by the planetary surface." settingName="Surface Albedo" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarks}/>
                   </SingleSettingController>
                 </div>
                 <div className="simulation-container" >
                   Trenberth Diagram
-                <SimulationCanvas language={this.state.english} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
+                <SimulationCanvas language={this.state.french} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
                 </div>
               </div>
             </div>
@@ -398,11 +398,11 @@ class App extends Component {
               <div className="main-container">
                 <div className="setting-container">
                   <SingleSettingController>
-                    <SliderSettingPed language={this.state.english} description="The amount of starlight that reaches the planet." settingName="Energy from star" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"x what Earth receives from the Sun"}/>
+                    <SliderSettingPed language={this.state.french} description="The amount of starlight that reaches the planet." settingName="Energy from star" maxSettingValue={100} step={0.1} default={(Math.log10(this.state.stellarRadiationPed)+2)*100/4} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarks} units={"x what Earth receives from the Sun"}/>
                   </SingleSettingController>
                   <SingleSettingController>
                     <LayerContainerPed settingName="Atmosphere" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
-                      <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.english} />
+                      <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.french} />
                     </LayerContainerPed>
                   </SingleSettingController>
                   <SingleSettingController position = 'last'>
@@ -413,7 +413,7 @@ class App extends Component {
                 </div>
                 <div className="simulation-container" >
                   Simulation
-                <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.english}/>
+                <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.french}/>
                 </div>
               </div>
             </div>
@@ -427,12 +427,12 @@ class App extends Component {
 
     else{
     return (
-      <div className="App">
+      <div className="App"> 
         <span className="topcorner">
-            <font color="white" font-weight="bold">Français&nbsp;</font>
-            <LanguageSwitch checked = {this.state.english} handleChange = {this.changeLanguage}/> 
-            <font color="#797878" font-weight="bold">&nbsp;Anglais&nbsp;</font>
-        </span>
+            <font color="#797878" font-weight="bold">Anglais&nbsp;</font>
+            <LanguageSwitch checked = {this.state.french} handleChange = {this.changeLanguage}/> 
+            <font color="white" font-weight="bold">&nbsp;Français&nbsp;</font>
+            </span>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Appli Climat 3.1</h1>
@@ -457,7 +457,7 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSetting language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint le sommet de l'atmosphère."
+                  <SliderSetting language={this.state.french} description="Quantité de la lumière de l'étoile qui atteint le sommet de l'atmosphère."
                   settingName="Radiation stellaire" maxSettingValue={100} step={0.1} 
                   default={(Math.log10(this.state.stellarRadiation)+2)*100/4} 
                   setting={this.state.stellarRadiation} handler={this.changeStellarRadiation} 
@@ -471,12 +471,12 @@ class App extends Component {
                   </LayerContainer>
                 </SingleSettingController>
                 <SingleSettingController>
-                  <SliderSetting language={this.state.english} description="Fraction de la lumière de l'étoile qui est réfléchie par la surface planétaire." settingName="Albédo de la surface" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarksFr}/>
+                  <SliderSetting language={this.state.french} description="Fraction de la lumière de l'étoile qui est réfléchie par la surface planétaire." settingName="Albédo de la surface" maxSettingValue={0.99} step={0.01} default={this.state.planetaryAlbedo} setting={this.state.planetaryAlbedo} handler={this.changeAlbedo} marks={defaultMarksFr}/>
                 </SingleSettingController>
               </div>
               <div className="simulation-container" >
                 Diagramme de Trenberth
-              <SimulationCanvas language={this.state.english} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
+              <SimulationCanvas language={this.state.french} planetaryAlbedo={this.state.planetaryAlbedo} stellarRadiation={this.state.stellarRadiation} layers={this.state.layers} />
               </div>
             </div>
           </div>
@@ -488,11 +488,11 @@ class App extends Component {
             <div className="main-container">
               <div className="setting-container">
                 <SingleSettingController>
-                  <SliderSettingPed language={this.state.english} description="Quantité de la lumière de l'étoile qui atteint la planète." settingName="Énergie de l'étoile" maxSettingValue={100} step={0.1} default={((Math.log10(this.state.stellarRadiationPed)+2)*100/4)} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarksFr} units={"x ce que la Terre reçoit du Soleil"}/>
+                  <SliderSettingPed language={this.state.french} description="Quantité de la lumière de l'étoile qui atteint la planète." settingName="Énergie de l'étoile" maxSettingValue={100} step={0.1} default={((Math.log10(this.state.stellarRadiationPed)+2)*100/4)} setting={this.state.stellarRadiationPed} handler={this.changeStellarRadiationPed} marks={radiationMarksFr} units={"x ce que la Terre reçoit du Soleil"}/>
                 </SingleSettingController>
                 <SingleSettingController>
                   <LayerContainerPed settingName="Atmosphère" layer={this.state.layerPed} addNewDefaultLayer={this.addNewDefaultLayerPed} alphaHandler={this.changeAlphaPed}>
-                    <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.english} />
+                    <AtmLayerPed removeLayer={this.removeLayerPed} language={this.state.french} />
                   </LayerContainerPed>
                 </SingleSettingController>
                 <SingleSettingController position = 'last'>
@@ -503,7 +503,7 @@ class App extends Component {
               </div>
               <div className="simulation-container" >
                 Simulation
-              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.english} />
+              <SimulationCanvasPed planetaryAlbedo={this.state.planetaryAlbedoPed} stellarRadiation={this.state.stellarRadiationPed} layer={this.state.layerPed} language={this.state.french} />
               </div>
             </div>
           </div>

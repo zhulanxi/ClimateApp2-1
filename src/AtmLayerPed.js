@@ -36,7 +36,7 @@ class AtmLayerPed extends Component {
                     </span>
                 </div>
                 
-                {this.props.language === true ?
+                {this.props.language === false ?
                 <div className="core-line">
                 <p data-tip="Fraction of infrared light emitted by surface<br/> that is absorbed and re-emitted by atmosphere." 
                     data-place="top"

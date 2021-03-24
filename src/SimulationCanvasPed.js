@@ -32,7 +32,8 @@ class SimulationCanvasPed extends React.Component {
         const a = this.props.planetaryAlbedo;
         const s = this.props.stellarRadiation;
         const s0 = s*1361/4;
-        const e = typeof this.props.layer[0] === "undefined" ? -1 : this.props.layer[0].alpha;
+        const e = typeof this.props.layer[0] === "undefined" ? 0 : this.props.layer[0].alpha;
+        const atm_exists = typeof this.props.layer[0] === "undefined" ? false : true;
 
         const shortwaveColor = "#ffd11a"
         const longwaveColor = "#ff3333"
@@ -60,7 +61,7 @@ class SimulationCanvasPed extends React.Component {
         // Clear the canvas to draw new simulation
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (e !== -1) {
+        if (atm_exists) {
 
             // if there is an atmosphere;
 
@@ -143,11 +144,11 @@ class SimulationCanvasPed extends React.Component {
         ctx.fillStyle = "white";
         ctx.lineWidth = 0.5;
         ctx.stroke()
-        if (this.props.language){
+        if (! this.props.language){
             ctx.fillText("T    without greenhouse effect = "+(surfaceTempCel-deltaTemp)+ "°C", 50, 430);
         }
         else{
-            ctx.fillText("T    sans effect de serre = "+(surfaceTempCel-deltaTemp)+ "°C", 50, 430);
+            ctx.fillText("T    sans effet de serre = "+(surfaceTempCel-deltaTemp)+ "°C", 50, 430);
         }
         ctx.font = "10px Arial";
         ctx.fillText("surf", 60 , 430 );
@@ -160,7 +161,7 @@ class SimulationCanvasPed extends React.Component {
         ctx.fillStyle = "white";
         ctx.lineWidth = 0.5;
         ctx.stroke()
-        if (this.props.language){
+        if (! this.props.language){
             ctx.fillText("Greenhouse effect : " + deltaTemp + "°C", 50, 460);
         }else{
             ctx.fillText("Effet de serre : " + deltaTemp + "°C", 50, 460);
